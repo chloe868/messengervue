@@ -143,7 +143,7 @@
 </style>
 <script>
 import ROUTER from '../../../../router'
-import AUTH from '../..././../services/auth'
+import AUTH from '../../../../services/auth'
 import CONFIG from '../../../../config.js'
 export default {
   mounted(){
