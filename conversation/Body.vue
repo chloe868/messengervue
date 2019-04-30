@@ -2,8 +2,25 @@
   <div id="messenger">
     <div class="messenger-holder" v-if="conversations !== null">
       <div class="message-row" v-for="item, index in conversations">
-        <div class="template" v-if="parseInt(item.account_id) !== user.userID">
-          <div class="header">
+          <div class="template" v-if="parseInt(item.account_id) !== user.userID">
+            <div class="header">
+              <div class="profile">
+                <img :src="config.BACKEND_URL + item.account.profile.url" v-if="item.account.profile !== null">
+                <i class="fa fa-user-circle-o text-green" v-else></i>
+              </div>
+              <span class="details" v-if="item.account !== null">
+                <label><b>{{item.account.username}}</b></label>
+              </span>
+            </div>
+          <div class="content">
+            <label>
+              <label v-html="item.message"></label>
+            </label>
+          </div>
+        </div>
+
+        <div class="template" v-else>
+          <div class="header-right">
             <div class="profile">
               <img :src="config.BACKEND_URL + item.account.profile.url" v-if="item.account.profile !== null">
               <i class="fa fa-user-circle-o text-green" v-else></i>
@@ -12,32 +29,15 @@
               <label><b>{{item.account.username}}</b></label>
             </span>
           </div>
-        <div class="content">
-          <label>
-            <label v-html="item.message"></label>
-          </label>
-        </div>
-      </div>
-
-      <div class="template" v-else>
-        <div class="header-right">
-          <div class="profile">
-            <img :src="config.BACKEND_URL + item.account.profile.url" v-if="item.account.profile !== null">
-            <i class="fa fa-user-circle-o text-green" v-else></i>
+          <div class="content-right">
+            <label>
+              <bdi>
+                <label v-html="item.message"></label>
+              </bdi>
+            </label>
           </div>
-          <span class="details" v-if="item.account !== null">
-            <label><b>{{item.account.username}}</b></label>
-          </span>
-        </div>
-        <div class="content-right">
-          <label>
-            <bdi>
-              <label v-html="item.message"></label>
-            </bdi>
-          </label>
         </div>
       </div>
-    </div>
   </div>
   </div>
 </template>
@@ -45,8 +45,14 @@
 .messenger-holder{
   width: 100%;
   float: left;
-  height: 74vh;
-  overflow-y: auto;
+  min-height: 50px;
+  overflow-y: hidden;
+}
+.messenger-messages{
+  width: 100%;
+  float: left;
+  min-height: 50px;
+  overflow-y: hidden;
 }
 .message-row, .template{
   width: 98%;

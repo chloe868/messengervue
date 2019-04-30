@@ -1,7 +1,9 @@
 <template>
   <div class="holder" id="groupConversation">
     <c-header :group="group" v-if="group !== null"></c-header>
-    <c-body :conversations="auth.messenger.messages" v-if="group !== null"></c-body>
+    <div class="conversation-messages-holder">
+      <c-body :conversations="auth.messenger.messages" v-if="group !== null"></c-body>
+    </div>
     <c-footer :group="group" v-if="group !== null"></c-footer>
   </div>
 </template>
@@ -9,6 +11,15 @@
 .holder{
   width: 100%;
   float: left;
+}
+.conversation-messages-holder{
+  width: 100%;
+  float: left;
+  height: 74vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  position: relative;
 }
 </style>
 <script>
