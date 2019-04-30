@@ -104,6 +104,7 @@ export default {
             this.newMessageInput = null
             this.$parent.group = response.data
             this.$parent.newFlag = false
+            AUTH.messenger.messengerGroupId = parseInt(response.data)
             this.$parent.retrieve()
           }
         })
