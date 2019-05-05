@@ -74,6 +74,14 @@ export default {
     'groups': require('components/increment/messengervue/userlist/Groups.vue'),
     'empty': require('components/increment/generic/empty/Empty.vue')
   },
+  watch: {
+    '$route.params.username': function(){
+      if(this.$route.params.username){
+        this.username = this.$route.params.username
+        this.retrieve()
+      }
+    }
+  },
   methods: {
     redirect(parameter){
       ROUTER.push(parameter)
@@ -98,14 +106,39 @@ export default {
       this.APIRequest('custom_messenger_groups/retrieve', parameter).done(response => {
         this.groups = response.data
         this.partners = response.accounts
-        if(this.partners !== null){
-          this.prevModuleSelected = 'partners'
-          this.selectedGroup(0, 'partners')
-        }else if(this.groups !== null){
-          this.prevModuleSelected = 'groups'
-          this.selectedGroup(response.active, 'groups')
+        if(this.username){
+          let indexGroup = this.checkIfExistUsername(this.groups)
+          let flag = false
+          if(indexGroup !== null){
+            this.prevModuleSelected = 'groups'
+            this.makeActiveCard(indexGroup, 'groups')
+            flag = true
+          }else{
+            let indexPartner = this.checkIfExistUsername(this.partners)
+            if(indexPartner !== null){
+              this.prevModuleSelected = 'partners'
+              this.makeActiveCard(indexPartner, 'partners')
+              flag = true
+            }
+          }
+          if(flag === false && this.groups !== null){
+            this.prevModuleSelected = 'groups'
+            this.makeActiveCard(0, 'groups')
+          }else if(flag === false && this.partners !== null){
+            this.prevModuleSelected = 'partners'
+            this.makeActiveCard(response.active, 'partners')
+          }
         }
       })
+    },
+    checkIfExistUsername(list){
+      for (var i = 0; i < list.length; i++) {
+        if(list[i].title.username === this.username){
+          console.log(i)
+          return i
+        }
+      }
+      return null
     },
     selectedGroup(index, moduleText){
       this.selectedIndex = index

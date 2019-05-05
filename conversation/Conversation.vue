@@ -68,7 +68,9 @@ export default {
             'created_at': 'ASC'
           }
         }
+        $('#loading').css({display: 'block'})
         this.APIRequest('messenger_messages/retrieve', parameter).done(response => {
+          $('#loading').css({display: 'none'})
           if(response.data.length > 0){
             AUTH.messenger.messages = response.data
           }else{
