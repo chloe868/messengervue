@@ -52,7 +52,7 @@ import axios from 'axios'
 export default {
   mounted(){
     AUTH.checkPlan()
-    this.retrieve()
+    this.retrieve(this.$route.params.username ? this.$route.params.username : '')
   },
   data(){
     return {
@@ -65,7 +65,7 @@ export default {
       selectedIndex: 0,
       selectedGroupData: null,
       prevModuleSelected: null,
-      username: this.$route.params.username
+      groupId: null
     }
   },
   props: ['params'],
@@ -77,8 +77,17 @@ export default {
   watch: {
     '$route.params.username': function(){
       if(this.$route.params.username){
-        this.username = this.$route.params.username
-        this.retrieve()
+        let indexGroup = this.checkIfExistUsername(this.$route.params.username, this.groups)
+        if(indexGroup !== null){
+          this.prevModuleSelected = 'groups'
+          this.makeActiveCard(indexGroup, 'groups')
+        }else{
+          let indexPartner = this.checkIfExistUsername(this.$route.params.username, this.partners)
+          if(indexPartner !== null){
+            this.prevModuleSelected = 'partners'
+            this.makeActiveCard(indexPartner, 'partners')
+          }
+        }
       }
     }
   },
@@ -97,44 +106,46 @@ export default {
         })
       }
     },
-    retrieve(){
+    retrieve(username){
+      console.log(username)
       let parameter = {
         account_id: this.user.userID,
         account_type: this.user.type,
-        username: (this.username) ? this.username : ''
+        username: username
       }
       this.APIRequest('custom_messenger_groups/retrieve', parameter).done(response => {
         this.groups = response.data
         this.partners = response.accounts
-        if(this.username){
-          let indexGroup = this.checkIfExistUsername(this.groups)
-          let flag = false
-          if(indexGroup !== null){
-            this.prevModuleSelected = 'groups'
-            this.makeActiveCard(indexGroup, 'groups')
-            flag = true
-          }else{
-            let indexPartner = this.checkIfExistUsername(this.partners)
-            if(indexPartner !== null){
-              this.prevModuleSelected = 'partners'
-              this.makeActiveCard(indexPartner, 'partners')
+        setTimeout(() => {
+          if(username){
+            let indexGroup = this.checkIfExistUsername(username, this.groups)
+            let flag = false
+            if(indexGroup !== null){
+              this.prevModuleSelected = 'groups'
+              this.makeActiveCard(indexGroup, 'groups')
               flag = true
+            }else{
+              let indexPartner = this.checkIfExistUsername(username, this.partners)
+              if(indexPartner !== null){
+                this.prevModuleSelected = 'partners'
+                this.makeActiveCard(indexPartner, 'partners')
+                flag = true
+              }
+            }
+            if(flag === false && this.groups !== null){
+              this.prevModuleSelected = 'groups'
+              this.makeActiveCard(0, 'groups')
+            }else if(flag === false && this.partners !== null){
+              this.prevModuleSelected = 'partners'
+              this.makeActiveCard(response.active, 'partners')
             }
           }
-          if(flag === false && this.groups !== null){
-            this.prevModuleSelected = 'groups'
-            this.makeActiveCard(0, 'groups')
-          }else if(flag === false && this.partners !== null){
-            this.prevModuleSelected = 'partners'
-            this.makeActiveCard(response.active, 'partners')
-          }
-        }
+        }, 1000)
       })
     },
-    checkIfExistUsername(list){
+    checkIfExistUsername(username, list){
       for (var i = 0; i < list.length; i++) {
-        if(list[i].title.username === this.username){
-          console.log(i)
+        if(list[i].title.username === username){
           return i
         }
       }
