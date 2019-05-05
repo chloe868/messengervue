@@ -73,12 +73,28 @@ export default {
           $('#loading').css({display: 'none'})
           if(response.data.length > 0){
             AUTH.messenger.messages = response.data
+            this.updateUnreadToRead()
           }else{
             AUTH.messenger.messages = null
           }
         })
       }else{
         AUTH.messenger.messages = null
+      }
+    },
+    updateUnreadToRead(){
+      if(AUTH.messenger.messages !== null){
+        let lastMessage = AUTH.messenger.messages[AUTH.messenger.messages.length - 1]
+        if(parseInt(lastMessage.account.id) !== this.user.userID){
+          // update
+          let parameter = {
+            id: lastMessage.id,
+            status: 1
+          }
+          this.APIRequest('messenger_messages/update', parameter).then(response => {
+            AUTH.retrieveMessages(this.user.userID, this.user.type)
+          })
+        }
       }
     }
   }

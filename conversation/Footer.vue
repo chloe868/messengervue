@@ -83,12 +83,13 @@ export default {
           message: this.newMessageInput,
           account_id: this.user.userID,
           status: 'messenger',
-          payload: 'messenger'
+          payload: 'messenger',
+          type: 'messenger'
         }
         this.APIRequest('messenger_messages/create', parameter).then(response => {
-          if(response.data > 0){
+          if(response.data !== null){
             this.newMessageInput = null
-            this.$parent.retrieve()
+            AUTH.messenger.messages.push(response.data)
           }
         })
       }else if((this.newMessageInput !== '' || this.newMessageInput !== null) && this.group.new === true){
@@ -97,7 +98,8 @@ export default {
           message: this.newMessageInput,
           member: this.group.id,
           status: 'messenger',
-          payload: 'messenger'
+          payload: 'messenger',
+          type: 'messenger'
         }
         this.APIRequest('custom_messenger_groups/create', parameter).then(response => {
           if(response.data !== null){

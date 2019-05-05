@@ -107,7 +107,6 @@ export default {
       }
     },
     retrieve(username){
-      console.log(username)
       let parameter = {
         account_id: this.user.userID,
         account_type: this.user.type,
