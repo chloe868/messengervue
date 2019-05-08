@@ -64,6 +64,10 @@ export default {
     },
     selected(index, moduleText){
       this.$parent.makeActive(index, moduleText)
+      this.updateModalViewFlag()
+    },
+    updateModalViewFlag(){
+      this.$parent.updateModalViewFlag(false)
     }
   }
 }

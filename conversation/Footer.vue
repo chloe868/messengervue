@@ -1,17 +1,13 @@
 <template>
   <div class="holder">
     <input type="text" class="form-control" placeholder="Type your message here..." v-model="newMessageInput" @keyup.enter="newmessage()" />
-    <span>
-      <i class="fas fa-location-arrow" @click="newmessage()"></i>
-    </span>
   </div>
 </template>
 <style scoped>
 .holder{
   width: 100%;
   float: left;
-  height: 8vh;
-  background: #22b173;
+  height: 10vh;
   color: #fff;
 }
 .profile{
@@ -23,7 +19,6 @@
 
 .btn{
   width: 10%;
-  padding: 5px;
   float: right;
   height: 45px;
   position: relative;
@@ -33,11 +28,9 @@
 }
 
 .form-control{
-  width: 89% !important;
+  width: 100% !important;
   float: left !important;
-  height: 6vh !important;
-  margin-top: 1vh !important;
-  margin-left: 1% !important;
+  height: 8vh !important;
 }
 span{
   width: 10%;

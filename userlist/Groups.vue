@@ -60,6 +60,9 @@ export default {
     },
     makeActive(selectedIndex, moduleText){
       this.$parent.makeActiveCard(selectedIndex, moduleText)
+    },
+    updateModalViewFlag(flag){
+      this.$parent.updateMobileViewFlag(flag)
     }
   }
 }

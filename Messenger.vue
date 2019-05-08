@@ -2,10 +2,10 @@
   <div>
     
     <div class="messenger-holder" v-if="groups !== null || partners !== null">
-      <div class="conversation">
+      <div class="conversation" v-bind:class="{'active-conversation': mobileViewFlag === false}">
         <conversation :groupId.sync="groupId" :group="selectedGroupData"></conversation>   
       </div>
-      <div class="users">
+      <div class="users" v-bind:class="{'active-users': mobileViewFlag === true}">
         <groups :groups="groups" :partners="partners" v-if="groups !== null || partners !== null"></groups>
       </div>
     </div>
@@ -38,9 +38,16 @@
 @media (max-width: 992px){
   .users{
     display: none;
+    width: 100%;
+    border-left: 0px;
+    margin-left: 0%;
   }
   .conversation{
     width: 100%;
+    display: none;
+  }
+  .active-conversation, .active-users{
+    display: block;
   }
 }
 </style>
@@ -65,7 +72,8 @@ export default {
       selectedIndex: 0,
       selectedGroupData: null,
       prevModuleSelected: null,
-      groupId: null
+      groupId: null,
+      mobileViewFlag: false
     }
   },
   props: ['params'],
@@ -199,6 +207,9 @@ export default {
       }
       this.prevModuleSelected = moduleText
       this.selectedGroup(index, moduleText)
+    },
+    updateMobileViewFlag(flag){
+      this.mobileViewFlag = flag
     }
   }
 }

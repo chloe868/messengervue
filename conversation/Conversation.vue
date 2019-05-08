@@ -15,7 +15,7 @@
 .conversation-messages-holder{
   width: 100%;
   float: left;
-  height: 74vh;
+  height: 72vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column-reverse;
@@ -96,6 +96,9 @@ export default {
           })
         }
       }
+    },
+    updateMobileViewFlag(flag){
+      this.$parent.updateMobileViewFlag(flag)
     }
   }
 }
