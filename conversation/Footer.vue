@@ -4,8 +4,6 @@
     <input type="text" class="form-control" placeholder="Type your message here..." 
       v-model="newMessageInput" @input="manageInput"/>
     <small class="instruction">Type @P_ to show/search products</small>
-    <span>HELLO</span>
-    <span>TESTING</span>
     <i id="send-btn" class="fa fa-paper-plane" title="send message" aria-hidden="true" @click="sendMessage()"></i>
     <div class="products" v-if="products.showProducts === true">
       <messenger-products 
