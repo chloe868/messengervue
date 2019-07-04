@@ -3,11 +3,15 @@
     <c-header :group="group" v-if="group !== null"></c-header>
     <div class="conversation-messages-holder">
       <c-body :conversations="auth.messenger.messages" v-if="group !== null"></c-body>
+      <!-- <div class="products" v-if="products.showProducts === true">
+        <messenger-products :searchProduct="products.searchedProducts" @searchProductEvent="products.searchedProducts = $event"></messenger-products>
+      </div> -->
     </div>
     <c-footer :group="group" v-if="group !== null"></c-footer>
   </div>
 </template>
-<style scoped>
+<style scoped lang="scss">
+@import "~assets/style/colors.scss";
 .holder{
   width: 100%;
   float: left;
@@ -21,11 +25,24 @@
   flex-direction: column-reverse;
   position: relative;
 }
+.products{
+  position: absolute;
+  height: 500px;
+  width: 300px;
+  z-index: 10;
+  bottom: 10px;
+  right: 20px;
+  background: white;
+  border: 1px solid $primary;
+  padding: 10px;
+  border-radius: 5px;
+  overflow: auto;
+}
 </style>
 <script>
-import ROUTER from '../../../../router'
-import AUTH from '../../../../services/auth'
-import CONFIG from '../../../../config.js'
+import ROUTER from 'src/router'
+import AUTH from 'src/services/auth'
+import CONFIG from 'src/config.js'
 import axios from 'axios'
 export default {
   mounted(){

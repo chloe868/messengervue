@@ -1,7 +1,7 @@
 <template>
   <div id="messenger">
     <div class="messenger-holder" v-if="conversations !== null">
-      <div class="message-row" v-for="item, index in conversations">
+      <div class="message-row" v-for="(item, index) in conversations" :key="index">
           <div class="template" v-if="parseInt(item.account_id) !== user.userID">
             <div class="header">
               <div class="profile">

@@ -4,6 +4,7 @@
     <i class="fa fa-user-circle-o" v-else></i>
     <label>{{group.title.username}}
       <!-- <span class="badge badge-primary">{{group.total_members}}</span> -->
+      
     </label>
     
   </div>

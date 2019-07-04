@@ -1,6 +1,5 @@
 <template>
   <div>
-    
     <div class="messenger-holder" v-if="groups !== null || partners !== null">
       <div class="conversation" v-bind:class="{'active-conversation': mobileViewFlag === false}">
         <conversation :groupId.sync="groupId" :group="selectedGroupData"></conversation>   
@@ -13,10 +12,13 @@
     <empty v-if="groups === null && partners === null" :title="'You do not have conversation right now.'" :action="'Wait for your customer to message you.'"></empty>
   </div>
 </template>
-<style scoped>
+<style scoped lang="scss">
+@import "~assets/style/colors.scss";
+
 .messenger-holder{
   width: 100%;
   float: left;
+  border: 1px solid $primary;
 }
 .conversation{
   width: 70%;
@@ -26,10 +28,9 @@
   height: 90vh;
 }
 .users{
-  width: 28%;
+  width: 30%;
   float: left;
   height: 90vh;
-  margin-left: 2%; 
   overflow-y:scroll;
   border-left: solid 1px #22b173;
 }

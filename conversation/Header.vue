@@ -4,8 +4,9 @@
     <i class="fa fa-user-circle-o" v-else></i>
     <label>{{group.title.username}}
       <!-- <span class="badge badge-primary">{{group.total_members}}</span> -->
-    </label>
-     <i class="fa fa-chevron-right" @click="setMobileView()"></i>
+    </label> 
+    <i class="fa fa-chevron-right" @click="setMobileView()"></i>
+    <i id="call-icon" class="fa fa-phone-square" aria-hidden="true" @click="callHandler"></i>
   </div>
 </template>
 <style scoped>
@@ -15,6 +16,7 @@
   height: 8vh;
   padding-left: 5px;
   border-bottom: solid 1px #eee;
+  padding-left: 10px;
 }
 .profile{
   width: 40px;
@@ -43,9 +45,23 @@ i{
   padding-right: 10px;
   float: right;
 }
+
+#call-icon {
+    float: right;
+    margin-right: 25px;
+    font-size: 45px;
+}
+
+#call-icon:hover {
+    cursor: pointer;
+}
+
 @media (max-width: 991px){
   .fa-chevron-right{
     display: block;
+  }
+  #call-icon {
+    margin-right: 10px;
   }
 }
 </style>
@@ -68,6 +84,9 @@ export default {
     },
     setMobileView(){
       this.$parent.updateMobileViewFlag(true)
+    },
+    callHandler(){
+      AUTH.triggerAudioCall()
     }
   }
 }
