@@ -21,16 +21,16 @@
 @import "~assets/style/colors.scss";
 .products{
   position: absolute;
-  height: 500px;
+  height: calc(100vh - 300px);
   width: 300px;
   z-index: 10;
-  bottom: 100px;
+  bottom: 12vh;
   right: 20px;
   background: white;
   border: 1px solid $primary;
   padding: 10px;
   border-radius: 5px;
-  overflow: auto;
+  // overflow: auto;
 }
 small.instruction {
     position: absolute;

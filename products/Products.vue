@@ -46,7 +46,6 @@
     border: solid 1px #ddd;
     margin-bottom: 10px;
     color: #555;
-    margin-top: 10px;
   }
   .hovered {
     cursor: pointer;

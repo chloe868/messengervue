@@ -22,26 +22,27 @@
   min-height: 10px;
   overflow-y: hidden;
   margin-bottom: 50px;
+  position: relative;
 }
 .product-holder{
   width: 100%;
   float: left;
   min-height: 10px;
   overflow-y: hidden;
+  position: relative;
 }
 .listing{
   width: 100%;
   float: left;
   min-height: 10px;
   overflow-y: hidden;
+  position: relative;
 }
 .listing .filter{
   width: 100%;
   float: left;
   height: 50px;
-  margin-top: px;
 }
-
 .form-control{
   height: 45px !important;
 }
@@ -64,6 +65,12 @@
   font-size: left;
   min-height: 10px;
   overflow-y: hidden;
+}
+
+.results {
+  overflow-y: auto !important;
+  /* height: 438px; */
+  height: calc(100vh - 362px) !important;
 }
 
 </style>
