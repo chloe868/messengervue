@@ -2,7 +2,7 @@
   <div id="footer" class="holder">
     <i id="attach-file" class="fa fa-paperclip" title="upload file" aria-hidden="true" @click="showImages()"></i>
     <input type="text" class="form-control" placeholder="Type your message here..." 
-      v-model="newMessageInput" @input="manageInput"/>
+      v-model="newMessageInput" @keypress="sendMessageOnEnter" @input="manageInput"/>
     <small class="instruction">Type @P_ to show/search products</small>
     <i id="send-btn" class="fa fa-paper-plane" title="send message" aria-hidden="true" @click="sendMessage()"></i>
     <div class="products" v-if="products.showProducts === true">
@@ -142,7 +142,6 @@ export default {
         let n = lowStr.lastIndexOf('@p_')
         let temp = n > -1 ? str.substring(n) : ''  // true if '@p_' is found
         let searchProduct = temp.slice(3) // removing @P_ in searching
-        // console.log(searchProduct)
         if(trigger && str !== ' ' || n > -1){
           this.products = {
             showProducts: true,
@@ -161,6 +160,11 @@ export default {
             showProducts: false
           }
         }
+      }
+    },
+    sendMessageOnEnter(event){
+      if(event.charCode === 13){
+        this.sendMessage()
       }
     },
     sendMessage(){
