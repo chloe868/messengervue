@@ -34,7 +34,6 @@
   right: 20px;
   background: white;
   border: 1px solid $primary;
-  // padding: 10px;
   border-radius: 5px;
   overflow: auto;
 }
