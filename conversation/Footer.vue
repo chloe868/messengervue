@@ -2,7 +2,7 @@
   <div id="footer" class="holder">
     <i id="attach-file" class="fa fa-paperclip" title="upload file" aria-hidden="true" @click="showImages()"></i>
     <input type="text" class="form-control" placeholder="Type your message here..." 
-      v-model="newMessageInput" @keypress="sendMessageOnEnter" @input="manageInput"/>
+      v-model="newMessageInput" @keyup="keyupHandler" @keypress="keypressHandler" @input="manageInput"/>
     <small class="instruction" v-if="user.type === 'PARTNER'">Type @P_ to show/search products</small>
     <i id="send-btn" class="fa fa-paper-plane" title="send message" aria-hidden="true" @click="sendMessage()"></i>
     <div class="products" v-if="products.showProducts === true">
@@ -162,7 +162,15 @@ export default {
         }
       }
     },
-    sendMessageOnEnter(event){
+    keyupHandler(event){ // hide messenger-products when text-input is cleared
+      if(event.target.value === ''){
+        this.products = {
+          showProducts: false,
+          searchedProducts: ''
+        }
+      }
+    },
+    keypressHandler(event){ // send message using enter key
       if(event.charCode === 13){
         this.sendMessage()
       }
