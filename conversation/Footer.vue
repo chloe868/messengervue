@@ -136,7 +136,7 @@ export default {
     manageInput(event){
       this.newMessageInput = event.target.value
       if(this.newMessageInput && this.user.type === 'PARTNER'){
-        let str = this.newMessageInput
+        let str = this.newMessageInput.slice()
         let lowStr = str.toLowerCase()
         let trigger = lowStr.endsWith('@p') // triggers messenger-products
         let n = lowStr.lastIndexOf('@p_')
@@ -156,7 +156,7 @@ export default {
         }
         if(searchProduct[0] === ' '){
           this.products = {
-            ...this.prodcuts,
+            ...this.products,
             showProducts: false
           }
         }

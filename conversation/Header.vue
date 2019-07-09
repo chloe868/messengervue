@@ -5,7 +5,7 @@
     <label id="user-name">{{group.title.username}}
       <!-- <span class="badge badge-primary">{{group.total_members}}</span> -->
     </label> 
-    <i id="icon-call" class="fa fa-phone bg-primary icons" @click="callHandler"></i>
+    <i id="icon-call" class="fa fa-phone bg-primary icons" @click="callHandler(group.title.id)"></i>
     <i class="fa fa-chevron-right" @click="setMobileView()"></i>
   </div>
 </template>
@@ -92,8 +92,8 @@ export default {
     setMobileView(){
       this.$parent.updateMobileViewFlag(true)
     },
-    callHandler(){
-      AUTH.triggerAudioCall()
+    callHandler(id){
+      AUTH.triggerAudioCall(2, id)
     }
   }
 }
