@@ -9,7 +9,7 @@
       <messenger-products 
         :messageInput="newMessageInput"
         :searchProduct="products.searchedProducts" 
-        @searchProductEvent="products.searchedProducts = $event.searchValue, newMessageInput = $event.updatedValue">
+        @searchProductEvent="searchProductEventHandler($event)">
       </messenger-products>
     </div>
     <browse-images-modal :object="user.profile" v-if="user.profile !== null"></browse-images-modal>
@@ -174,6 +174,10 @@ export default {
       if(event.charCode === 13){
         this.sendMessage()
       }
+    },
+    searchProductEventHandler(event){
+      this.sproducts.searchedProducts = event.searchValue
+      this.newMessageInput = event.updatedValue
     },
     sendMessage(){
       if((this.newMessageInput !== '' || this.newMessageInput !== null) && this.group.new === false){
