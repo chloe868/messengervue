@@ -147,7 +147,6 @@ export default {
             showProducts: true,
             searchedProducts: searchProduct
           }
-          $('#messenger-prodcut-holder:first').addClass('hovered')
         }else{
           this.products = {
             showProducts: false,
@@ -176,7 +175,7 @@ export default {
       }
     },
     searchProductEventHandler(event){
-      this.sproducts.searchedProducts = event.searchValue
+      this.products.searchedProducts = event.searchValue
       this.newMessageInput = event.updatedValue
     },
     sendMessage(){
@@ -185,9 +184,9 @@ export default {
           messenger_group_id: this.group.id,
           message: this.newMessageInput,
           account_id: this.user.userID,
-          status: 'messenger',
-          payload: 'messenger',
-          type: 'messenger'
+          status: 0,
+          payload: 'product',
+          payload_value: 2
         }
         this.APIRequest('messenger_messages/create', parameter).then(response => {
           if(response.data !== null){
@@ -207,10 +206,9 @@ export default {
         this.APIRequest('custom_messenger_groups/create', parameter).then(response => {
           if(response.data !== null){
             this.newMessageInput = null
-            this.$parent.group = response.data
             this.$parent.newFlag = false
             AUTH.messenger.messengerGroupId = parseInt(response.data)
-            this.$parent.retrieve()
+            this.$emit('changeGroupEvent', response.data)
           }
         })
       }

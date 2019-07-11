@@ -2,7 +2,7 @@
   <div>
     <div class="messenger-holder" v-if="groups !== null || partners !== null">
       <div class="conversation" v-bind:class="{'active-conversation': mobileViewFlag === false}">
-        <conversation :groupId.sync="groupId" :group="selectedGroupData"></conversation>   
+        <conversation :groupId.sync="groupId" :group="selectedGroupData" @changeGroupEvent="changeGroupHandler($event)"></conversation>   
       </div>
       <div class="users" v-bind:class="{'active-users': mobileViewFlag === true}">
         <groups :groups="groups" :partners="partners" v-if="groups !== null || partners !== null"></groups>
@@ -213,6 +213,10 @@ export default {
     },
     updateMobileViewFlag(flag){
       this.mobileViewFlag = flag
+    },
+    changeGroupHandler(data){
+      this.selectedGroupData = data
+      this.retrieve(this.user.username)
     }
   }
 }

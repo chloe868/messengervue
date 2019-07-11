@@ -8,7 +8,7 @@
           </div>
         </div>
         <div class="results">
-          <products v-if="data !== null" :data="sortedData"></products>
+          <products v-if="data !== null" :data="sortedData" :selectedId="selectedId" @changeSelectedIdEvent="selectedIdEvent($event)"></products>
           <dynamic-empty v-if="data === null" :title="'No products yet!'" :action="'Please be back soon.'" :icon="'far fa-smile'" :iconColor="'text-primary'"></dynamic-empty>
         </div>
       </div>
@@ -90,7 +90,8 @@ export default {
       errorMessage: null,
       data: null,
       searchValue: '',
-      newValue: ''
+      newValue: '',
+      selectedId: null
     }
   },
   components: {
@@ -132,17 +133,25 @@ export default {
       oldMessage = oldMessage.slice(0, index + 3)
       let updatedSearchValue = oldMessage + updatedValue
       this.$emit('searchProductEvent', {searchValue: this.searchValue, updatedValue: updatedSearchValue})
+    },
+    selectedIdEvent(event){
+      this.selectedId = event
+      console.log(this.data.id)
     }
   },
   computed: {
     sortedData(){
-      return this.data.filter(product => {
+      let sorted = this.data.filter(product => {
         return (
           product.title.toLowerCase().includes(this.searchProduct.toLowerCase()) ||
           product.tags.toLowerCase().includes(this.searchProduct.toLowerCase()) ||
           product.sku.toLowerCase().includes(this.searchProduct.toLowerCase())
         )
       })
+      if(sorted !== null && sorted.length > 0){
+        this.selectedId = sorted[0].id
+      }
+      return sorted
     }
   }
 }

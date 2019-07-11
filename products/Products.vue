@@ -1,6 +1,6 @@
 <template>
   <div class="products-container" v-if="data !== null">
-    <div id="messenger-prodcut-holder" class="product-holder" v-for="(item, index) in data" :key="index" @click="redirect('../marketplace/product/' + item.code)">
+    <div v-bind:class="{'active-product': item.id === selectedId}" class="product-holder" v-for="(item, index) in data" :key="index" @click="selectedIdHandler(item.id)">
       <div class="product-image">
         <img :src="config.BACKEND_URL + item.featured[0].url" v-if="item.featured !== null">
         <i class="fa fa-image" v-else></i>
@@ -136,6 +136,12 @@
   .product-holder:hover .product-wishlist{
     display: block;
   }
+  .active-product {
+    cursor: pointer;
+    border: solid 1px #ffaa81;
+    background: #ffaa81;
+    color: #fff;
+  }
   @media (max-width: 991px){
     .product-holder{
       width: 90%;
@@ -160,7 +166,7 @@ export default {
       errorMessage: null
     }
   },
-  props: ['data'],
+  props: ['data', 'selectedId'],
   methods: {
     redirect(parameter){
       ROUTER.push(parameter)
@@ -176,6 +182,9 @@ export default {
         $('#loading').css({display: 'none'})
         this.$parent.retrieve()
       })
+    },
+    selectedIdHandler(id){
+      this.$emit('changeSelectedIdEvent', id)
     }
   }
 }
