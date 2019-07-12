@@ -4,12 +4,14 @@
     <input type="text" class="form-control" placeholder="Type your message here..." 
       v-model="newMessageInput" @keyup="keyupHandler" @keypress="keypressHandler" @input="manageInput"/>
     <small class="instruction" v-if="user.type === 'PARTNER'">Type @P_ to show/search products</small>
-    <i id="send-btn" class="fa fa-paper-plane" title="send message" aria-hidden="true" @click="sendMessage()"></i>
+    <i id="send-btn" class="fa fa-paper-plane" title="send message" aria-hidden="true" @click="sendMessage(selectedProductId)"></i>
     <div class="products" v-if="products.showProducts === true">
       <messenger-products 
         :messageInput="newMessageInput"
         :searchProduct="products.searchedProducts" 
-        @searchProductEvent="searchProductEventHandler($event)">
+        :selectedProductId="selectedProductId"
+        @searchProductEvent="searchProductEventHandler($event)"
+        @selectedIdEvent="selectedIdEventHandler($event)">
       </messenger-products>
     </div>
     <browse-images-modal :object="user.profile" v-if="user.profile !== null"></browse-images-modal>
@@ -121,7 +123,8 @@ export default {
         showProducts: false,
         searchedProducts: ''
       },
-      updatedMessage: ''
+      updatedMessage: '',
+      selectedProductId: null
     }
   },
   props: ['group'],
@@ -179,14 +182,20 @@ export default {
       this.newMessageInput = event.updatedValue
     },
     sendMessage(){
+      let messageType = 'text'
+      let messageValue = null
+      if(this.selectedProductId !== null){
+        messageType = 'product'
+        messageValue = this.selectedProductId
+      }
       if((this.newMessageInput !== '' || this.newMessageInput !== null) && this.group.new === false){
         let parameter = {
           messenger_group_id: this.group.id,
           message: this.newMessageInput,
           account_id: this.user.userID,
           status: 0,
-          payload: 'product',
-          payload_value: 2
+          payload: messageType,
+          payload_value: messageValue
         }
         this.APIRequest('messenger_messages/create', parameter).then(response => {
           if(response.data !== null){
@@ -212,6 +221,11 @@ export default {
           }
         })
       }
+      this.selectedProductId = null
+    },
+    selectedIdEventHandler(event){
+      this.selectedProductId = event
+      console.log(this.selectedProductId)
     },
     showImages(){
       $('#browseImagesModal').modal('show')

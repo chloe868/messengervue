@@ -8,7 +8,7 @@
           </div>
         </div>
         <div class="results">
-          <products v-if="data !== null" :data="sortedData" :selectedId="selectedId" @changeSelectedIdEvent="selectedIdEvent($event)"></products>
+          <products v-if="data !== null" :data="sortedData" :selectedId="selectedProductId" @selectedIdEvent="selectedIdEventHandler($event)"></products>
           <dynamic-empty v-if="data === null" :title="'No products yet!'" :action="'Please be back soon.'" :icon="'far fa-smile'" :iconColor="'text-primary'"></dynamic-empty>
         </div>
       </div>
@@ -75,9 +75,9 @@
 
 </style>
 <script>
-import ROUTER from '../../../../router'
-import AUTH from '../../../../services/auth'
-import CONFIG from '../../../../config.js'
+import ROUTER from 'src/router'
+import AUTH from 'src/services/auth'
+import CONFIG from 'src/config.js'
 import axios from 'axios'
 export default {
   mounted(){
@@ -90,15 +90,14 @@ export default {
       errorMessage: null,
       data: null,
       searchValue: '',
-      newValue: '',
-      selectedId: null
+      newValue: ''
     }
   },
   components: {
     'products': require('components/increment/messengervue/products/Products.vue'),
     'dynamic-empty': require('components/increment/generic/empty/EmptyDynamicIcon.vue')
   },
-  props: ['searchProduct', 'messageInput'],
+  props: ['searchProduct', 'messageInput', 'selectedProductId'],
   methods: {
     redirect(parameter){
       ROUTER.push(parameter)
@@ -134,9 +133,8 @@ export default {
       let updatedSearchValue = oldMessage + updatedValue
       this.$emit('searchProductEvent', {searchValue: this.searchValue, updatedValue: updatedSearchValue})
     },
-    selectedIdEvent(event){
-      this.selectedId = event
-      console.log(this.data.id)
+    selectedIdEventHandler(event){
+      this.$emit('selectedIdEvent', event)
     }
   },
   computed: {

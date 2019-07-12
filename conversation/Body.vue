@@ -2,7 +2,9 @@
   <div id="messenger">
     <div class="messenger-holder" v-if="conversations !== null">
       <div class="message-row" v-for="(item, index) in conversations" :key="index">
-          <div class="template" v-if="parseInt(item.account_id) !== user.userID">
+        
+        <div v-if="parseInt(item.account_id) !== user.userID">
+          <div class="template" v-if="item.payload === 'text'">
             <div class="header">
               <div class="profile">
                 <img :src="config.BACKEND_URL + item.account.profile.url" v-if="item.account.profile !== null">
@@ -12,36 +14,51 @@
                 <label><b>{{item.account.username}}</b></label>
               </span>
             </div>
-          <div class="content">
-            <label>
-              <label v-html="item.message"></label>
-            </label>
+            <div class="content">
+              <label>
+                <label v-html="item.message"></label>
+              </label>
+            </div>
           </div>
+
+          <product-message :classStyle="'left'" :data="item" v-else></product-message>
         </div>
 
-        <div class="template" v-else>
-          <div class="header-right">
-            <div class="profile">
-              <img :src="config.BACKEND_URL + item.account.profile.url" v-if="item.account.profile !== null">
-              <i class="fa fa-user-circle-o text-green" v-else></i>
+        <div v-else>
+          <div class="template" v-if="item.payload === 'text'">
+            <div class="header-right">
+              <div class="profile">
+                <img :src="config.BACKEND_URL + item.account.profile.url" v-if="item.account.profile !== null">
+                <i class="fa fa-user-circle-o text-green" v-else></i>
+              </div>
+              <span class="details" v-if="item.account !== null">
+                <label><b>{{item.account.username}}</b></label>
+              </span>
             </div>
-            <span class="details" v-if="item.account !== null">
-              <label><b>{{item.account.username}}</b></label>
-            </span>
+            <div class="content-right">
+              <label>
+                <bdi>
+                  <label v-html="item.message"></label>
+                </bdi>
+              </label>
+            </div>
           </div>
-          <div class="content-right">
-            <label>
-              <bdi>
-                <label v-html="item.message"></label>
-              </bdi>
-            </label>
-          </div>
+
+          <product-message :classStyle="'right'" :data="item" v-else></product-message>
         </div>
+
       </div>
-  </div>
+    </div>
   </div>
 </template>
-<style scoped>
+<style scoped lang="scss">
+@import "~assets/style/colors.scss";
+.content-product {
+  border: 1px solid $primary;
+  float: right !important;
+  width: auto !important;
+  height: auto !important;
+}
 .messenger-holder{
   width: 100%;
   float: left;
@@ -148,9 +165,9 @@
 
 </style>
 <script>
-import ROUTER from '../../../../router'
-import AUTH from '../../../../services/auth'
-import CONFIG from '../../../../config.js'
+import ROUTER from 'src/router'
+import AUTH from 'src/services/auth'
+import CONFIG from 'src/config.js'
 export default {
   mounted(){
   },
@@ -159,6 +176,9 @@ export default {
       user: AUTH.user,
       config: CONFIG
     }
+  },
+  components: {
+    'product-message': require('components/increment/messengervue/conversation/templates/Product.vue')
   },
   props: ['conversations'],
   methods: {

@@ -47,12 +47,6 @@
     margin-bottom: 10px;
     color: #555;
   }
-  .hovered {
-    cursor: pointer;
-    border: solid 1px #ffaa81;
-    background: #ffaa81;
-    color: #fff;
-  }
   .product-holder:hover{
     cursor: pointer;
     border: solid 1px #ffaa81;
@@ -184,7 +178,8 @@ export default {
       })
     },
     selectedIdHandler(id){
-      this.$emit('changeSelectedIdEvent', id)
+      this.$emit('selectedIdEvent', id)
+      console.log(this.data)
     }
   }
 }
