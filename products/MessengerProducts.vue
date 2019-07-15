@@ -134,6 +134,7 @@ export default {
       this.$emit('searchProductEvent', {searchValue: this.searchValue, updatedValue: updatedSearchValue})
     },
     selectedIdEventHandler(id){
+      // FOR PRODUCT ID AND IMAGE
       let image = this.sortedData.find(data => {
         return data.id === id
       })

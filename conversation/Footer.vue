@@ -277,6 +277,15 @@ export default {
     selectedIdEventHandler(product){
       this.selectedProductId = product.id
       this.selectedProductImage = product.image
+      // remove @p_...
+      let message = this.newMessageInput.slice().toLowerCase()
+      let n = message.lastIndexOf('@p')
+      let newMessage = message.slice(0, n)
+      this.products.showProducts = {
+        ...this.products,
+        showProducts: false
+      }
+      this.newMessageInput = newMessage.slice()
     },
     deleteSelectedProduct(){
       this.selectedProductId = null
