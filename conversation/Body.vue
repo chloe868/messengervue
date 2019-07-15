@@ -20,7 +20,6 @@
               </label>
             </div>
           </div>
-
           <product-message :classStyle="'left'" :data="item" v-else></product-message>
         </div>
 
@@ -43,7 +42,6 @@
               </label>
             </div>
           </div>
-
           <product-message :classStyle="'right'" :data="item" v-else></product-message>
         </div>
 
@@ -75,7 +73,7 @@
   width: 98%;
   min-height: 10px;
   overflow-y: hidden;
-  margin-top: 10px;
+  margin-bottom: 10px;
   margin-left: 1%;
   margin-right: 1%;
 }

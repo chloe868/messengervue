@@ -9,33 +9,35 @@
         <label><b>{{data.account.username}}</b></label>
       </span>
     </div>
-    <div :class="'content' + `${classStyle === 'right' ? '-right' : ''}`">
-      <label>
-        <bdi>
-          <label v-html="data.message"></label>
-        </bdi>
-      </label>
-    </div>
-    <div :class="'content' + `${classStyle === 'right' ? '-right' : ''}` + ' content-product ' + classStyle">
-      <div class="products-container" v-if="data.product !== null">
-        <div class="product-holder">
-          <div class="product-image">
-            <img :src="config.BACKEND_URL + data.product.featured[0].url" v-if="data.product.featured !== null" @click="redirect('/marketplace/product/' + data.product.code)">
-            <i class="fa fa-image" @click="redirect('/marketplace/product/' + data.product.code)" v-else></i>
-          </div>
-          <div class="product-details">
-            <div class="product-title">
-              <label style="padding-top: 5px;"><b>{{data.product.title}}</b></label>
-              <label>Quantity:  
-                {{data.product.inventories[0].qty != 0 ? data.product.inventories[0].qty : ''}}
-                <i v-if="data.product.inventories[0].qty === 0" class="fa fa-times-circle red" aria-hidden="true"></i>
-              </label>
-            </div>  
-            <div class="product-price">
-              <label v-if="data.product.price !== null">
-                <label v-if="data.product.price.length === 1">PHP {{data.product.price[0].price}}</label>
-                <label v-if="data.product.price.length > 1">PHP {{data.product.price[data.product.price.length - 1].price + ' - ' + data.product.price[0].price}}</label>
-              </label>
+    <div class="messege-container">
+      <div :class="'content' + `${classStyle === 'right' ? '-right' : ''}`">
+        <label>
+          <bdi>
+            <label v-html="data.message"></label>
+          </bdi>
+        </label>
+      </div>
+      <div :class="'content' + `${classStyle === 'right' ? '-right' : ''}` + ' content-product ' + classStyle">
+        <div class="products-container" v-if="data.product !== null">
+          <div class="product-holder">
+            <div class="product-image">
+              <img :src="config.BACKEND_URL + data.product.featured[0].url" v-if="data.product.featured !== null" @click="redirect('/marketplace/product/' + data.product.code)">
+              <i class="fa fa-image" @click="redirect('/marketplace/product/' + data.product.code)" v-else></i>
+            </div>
+            <div class="product-details">
+              <div class="product-title">
+                <label style="padding-top: 5px;"><b>{{data.product.title}}</b></label>
+                <label>Quantity:  
+                  {{data.product.inventories[0].qty != 0 ? data.product.inventories[0].qty : ''}}
+                  <i v-if="data.product.inventories[0].qty === 0" class="fa fa-times-circle red" aria-hidden="true"></i>
+                </label>
+              </div>  
+              <div class="product-price">
+                <label v-if="data.product.price !== null">
+                  <label v-if="data.product.price.length === 1">PHP {{data.product.price[0].price}}</label>
+                  <label v-if="data.product.price.length > 1">PHP {{data.product.price[data.product.price.length - 1].price + ' - ' + data.product.price[0].price}}</label>
+                </label>
+              </div>
             </div>
           </div>
         </div>
@@ -45,106 +47,117 @@
 </template>
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
-  .red {
-    color: red;
-  }
-  .products-container {
-    display: flex;
-    flex-direction: column;
-  }
-  .product-holder{
-    width: 100%;
-    height: auto !important;
-    border: solid 1px #ddd;
-    color: #555;
-  }
-  .product-holder:hover{
-    cursor: pointer;
+.red {
+  color: red;
+}
+.message-container {
+  border: 1px solid red;
+}
+.products-container {
+  display: flex;
+  flex-direction: column;
+}
+.product-holder{
+  width: 100%;
+  height: auto !important;
+  border: solid 1px $primary;
+  color: #555;
+  border-radius: 10px;
+}
+.product-holder:hover{
+  cursor: pointer;
+  border: solid 1px #ffaa81;
+  background: #ffaa81;
+  color: #fff;
+  .product-details {
     border: solid 1px #ffaa81;
-    background: #ffaa81;
-    color: #fff;
   }
-  .product-image{
-    width: 100%;
-    position: relative;
-    height: auto;
-    text-align: center;
-  }
-  .product-image img{
-    float: left;
-    width: 200px;
-  }
-  .product-image .fa-image{
-    font-size: 10rem;
-    // line-height: 250px;
-  }
-  .product-details{
-    height: 50px;
-    width: 100%;
-    float: left;
-    border-top: solid 1px #ddd;
-  }
-  .product-title{
-    width: 50%;
-    float: left;
-    height: 50px;
-  }
-  .product-title label{
-    width: 100%;
-    float: left;
-    font-size: 12px;
-    margin: 0px !important;
-    padding-left: 10px;
-  }
-  .product-price{
-    width: 50%;
-    float: left;
-    height: 50px;
-    line-height: 50px;
-    font-weight: 600;
-    text-align: right;
-    padding-right: 5px;
-  }
+}
+.product-image{
+  width: 100%;
+  position: relative;
+  height: auto;
+  text-align: center;
+}
+.product-image img {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.product-image img{
+  float: left;
+  width: 200px;
+}
+.product-image .fa-image{
+  font-size: 10rem;
+  // line-height: 250px;
+}
+.product-details{
+  height: 50px;
+  width: 100%;
+  float: left;
+  border-top: solid 1px $primary;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.product-title{
+  width: 50%;
+  float: left;
+  height: 50px;
+}
+.product-title label{
+  width: 100%;
+  float: left;
+  font-size: 12px;
+  margin: 0px !important;
+  padding-left: 10px;
+}
+.product-price{
+  width: 50%;
+  float: left;
+  height: 50px;
+  line-height: 50px;
+  font-weight: 600;
+  text-align: right;
+  padding-right: 5px;
+}
 
-  .product-wishlist{
-    height: 50px;
-    text-align: center;
-    line-height: 50px;
-    width: 100%;
-    position: absolute;
-    top: 50%;
-    z-index: 10;
-    display: none;
-  }
+.product-wishlist{
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  display: none;
+}
 
-  .product-wishlist:hover, .product-wishlist i:hover, .product-wishlist label:hover{
-    cursor: pointer;
-  }
+.product-wishlist:hover, .product-wishlist i:hover, .product-wishlist label:hover{
+  cursor: pointer;
+}
 
-  .product-wishlist label{
-    line-height: 50px;
-    float: left;
-    width: 50%;
-    text-align: center;
-  }
-  
-  .product-wishlist i{
-    font-size: 32px;
-    line-height: 50px;
-  }
+.product-wishlist label{
+  line-height: 50px;
+  float: left;
+  width: 50%;
+  text-align: center;
+}
 
-  .product-holder:hover .product-wishlist{
-    display: block;
-  }
-  .active-product {
-    cursor: pointer;
-    border: solid 1px #ffaa81;
-    background: #ffaa81;
-    color: #fff;
-  }
+.product-wishlist i{
+  font-size: 32px;
+  line-height: 50px;
+}
 
+.product-holder:hover .product-wishlist{
+  display: block;
+}
+.active-product {
+  cursor: pointer;
+  border: solid 1px #ffaa81;
+  background: #ffaa81;
+  color: #fff;
+}
 .content-product {
-  border: 1px solid $primary;
   width: auto !important;
   height: auto !important;
 }
