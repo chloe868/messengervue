@@ -1,12 +1,12 @@
 <template>
   <div id="footer" class="holder">
-    <div class="product-selected" v-if="selectedProductId !== null"> 
+    <div class="product-selected" v-if="selectedProduct !== null"> 
     <!-- <div class="product-selected">  -->
       <!-- <i class="fa fa-image"></i> -->
       <i class="fa fa-times close-icon" aria-hidden="true" @click="deleteSelectedProduct"></i>
       <!-- <img width="auto" height="100"
         src="https://dimg.dillards.com/is/image/DillardsZoom/zoom/perry-ellis-big--tall-herringbone-flat-front-pants/04137298_zi_light_beige.jpg" alt=""> -->
-      <img width="auto" height="100" v-if="selectedProductImage !== null" :src="selectedProductImage">
+      <img width="auto" height="100" v-if="selectedProductImage !== null" :src="config.BACKEND_URL + selectedProductImage">
       <i class="fa fa-image alt-image" v-else></i> 
       <div class="arrow-down"></div>
     </div>
@@ -14,14 +14,14 @@
       <i id="attach-file" class="fa fa-paperclip" title="upload file" aria-hidden="true" @click="showImages()"></i>
       <input type="text" class="form-control" placeholder="Type your message here..." 
         v-model="newMessageInput" @keyup="keyupHandler" @keypress="keypressHandler" @input="manageInput"/>
-      <i id="send-btn" class="fa fa-paper-plane" title="send message" aria-hidden="true" @click="sendMessage(selectedProductId)"></i>
+      <i id="send-btn" class="fa fa-paper-plane" title="send message" aria-hidden="true" @click="sendMessage(selectedProduct)"></i>
       <small class="instruction" v-if="user.type === 'PARTNER'">Type @P_ to show/search products</small>
     </div>
     <div class="products" v-if="products.showProducts === true">
       <messenger-products 
         :messageInput="newMessageInput"
         :searchProduct="products.searchedProducts" 
-        :selectedProductId="selectedProductId"
+        :selectedProduct="selectedProduct"
         @searchProductEvent="searchProductEventHandler($event)"
         @selectedIdEvent="selectedIdEventHandler($event)">
       </messenger-products>
@@ -174,7 +174,7 @@ export default {
         searchedProducts: ''
       },
       updatedMessage: '',
-      selectedProductId: null,
+      selectedProduct: null,
       selectedProductImage: null
     }
   },
@@ -235,9 +235,9 @@ export default {
     sendMessage(){
       let messageType = 'text'
       let messageValue = null
-      if(this.selectedProductId !== null){
+      if(this.selectedProduct !== null){
         messageType = 'product'
-        messageValue = this.selectedProductId
+        messageValue = this.selectedProduct.id
       }
       if((this.newMessageInput !== '' || this.newMessageInput !== null) && this.group.new === false){
         let parameter = {
@@ -247,6 +247,9 @@ export default {
           status: 0,
           payload: messageType,
           payload_value: messageValue
+        }
+        if(this.selectedProduct !== null){
+          parameter['product'] = this.selectedProduct
         }
         this.APIRequest('messenger_messages/create', parameter).then(response => {
           if(response.data !== null){
@@ -272,11 +275,11 @@ export default {
           }
         })
       }
-      this.selectedProductId = null
+      this.selectedProduct = null
     },
     selectedIdEventHandler(product){
-      this.selectedProductId = product.id
-      this.selectedProductImage = product.image
+      this.selectedProduct = product
+      this.selectedProductImage = product.featured[0].url
       // remove @p_...
       let message = this.newMessageInput.slice().toLowerCase()
       let n = message.lastIndexOf('@p')
@@ -288,7 +291,7 @@ export default {
       this.newMessageInput = newMessage.slice()
     },
     deleteSelectedProduct(){
-      this.selectedProductId = null
+      this.selectedProduct = null
     },
     showImages(){
       $('#browseImagesModal').modal('show')

@@ -8,7 +8,7 @@
           </div>
         </div>
         <div class="results">
-          <products v-if="data !== null" :data="sortedData" :selectedId="selectedProductId" @selectedIdEvent="selectedIdEventHandler($event)"></products>
+          <products v-if="data !== null" :data="sortedData" :selectedId="selectedProduct ? selectedProduct.id : null" @selectedIdEvent="selectedIdEventHandler($event)"></products>
           <dynamic-empty v-if="data === null" :title="'No products yet!'" :action="'Please be back soon.'" :icon="'far fa-smile'" :iconColor="'text-primary'"></dynamic-empty>
         </div>
       </div>
@@ -97,7 +97,7 @@ export default {
     'products': require('components/increment/messengervue/products/Products.vue'),
     'dynamic-empty': require('components/increment/generic/empty/EmptyDynamicIcon.vue')
   },
-  props: ['searchProduct', 'messageInput', 'selectedProductId'],
+  props: ['searchProduct', 'messageInput', 'selectedProduct'],
   methods: {
     redirect(parameter){
       ROUTER.push(parameter)
@@ -133,21 +133,8 @@ export default {
       let updatedSearchValue = oldMessage + updatedValue
       this.$emit('searchProductEvent', {searchValue: this.searchValue, updatedValue: updatedSearchValue})
     },
-    selectedIdEventHandler(id){
-      // FOR PRODUCT ID AND IMAGE
-      let image = this.sortedData.find(data => {
-        return data.id === id
-      })
-      if(image.featured !== null){
-        image = this.config.BACKEND_URL + image.featured[0].url
-      }else{
-        image = null
-      }
-      let data = {
-        id: id,
-        image: image
-      }
-      this.$emit('selectedIdEvent', data)
+    selectedIdEventHandler(item){
+      this.$emit('selectedIdEvent', item)
     }
   },
   computed: {

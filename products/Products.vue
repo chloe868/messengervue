@@ -1,18 +1,9 @@
 <template>
   <div class="products-container" v-if="data !== null">
-    <div v-bind:class="{'active-product': item.id === selectedId}" class="product-holder" v-for="(item, index) in data" :key="index" @click="selectedIdHandler(item.id)">
+    <div v-bind:class="{'active-product': item.id === selectedId}" class="product-holder" v-for="(item, index) in data" :key="index" @click="selectedIdHandler(item)">
       <div class="product-image">
         <img :src="config.BACKEND_URL + item.featured[0].url" v-if="item.featured !== null">
         <i class="fa fa-image" v-else></i>
-<!--         <div class="product-wishlist bg-primary" v-if="item.wishlist_flag === false && item.checkout_flag === false">
-          <label>
-            <i class="fa fa-heart"  @click="addToWishlist(item.id)" v-if="item.wishlist_flag === false && item.checkout_flag === false"></i>  
-          </label>
-          <label @click="redirect('marketplace/product/' + item.code)" style="border-left: solid 1px #ddd;">View</label>
-        </div>
-        <div class="product-wishlist bg-primary" v-else>
-          <label @click="redirect('marketplace/product/' + item.code)" style="width: 100%;">View</label>
-        </div> -->
       </div>
       <div class="product-details">
         <div class="product-title">
@@ -178,8 +169,8 @@ export default {
         this.$parent.retrieve()
       })
     },
-    selectedIdHandler(id){
-      this.$emit('selectedIdEvent', id)
+    selectedIdHandler(item){
+      this.$emit('selectedIdEvent', item)
     }
   }
 }
