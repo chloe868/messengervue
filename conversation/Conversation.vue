@@ -7,7 +7,7 @@
         <messenger-products :searchProduct="products.searchedProducts" @searchProductEvent="products.searchedProducts = $event"></messenger-products>
       </div> -->
     </div>
-    <c-footer :group="group" v-if="group !== null" @changeGroupEvent="changedGroupHandler($event)"></c-footer>
+    <c-footer :group="group" :conversations="auth.messenger.messages" v-if="group !== null" @changeGroupEvent="changedGroupHandler($event)"></c-footer>
   </div>
 </template>
 <style scoped lang="scss">

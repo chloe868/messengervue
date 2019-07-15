@@ -1,10 +1,22 @@
 <template>
   <div id="footer" class="holder">
-    <i id="attach-file" class="fa fa-paperclip" title="upload file" aria-hidden="true" @click="showImages()"></i>
-    <input type="text" class="form-control" placeholder="Type your message here..." 
-      v-model="newMessageInput" @keyup="keyupHandler" @keypress="keypressHandler" @input="manageInput"/>
-    <small class="instruction" v-if="user.type === 'PARTNER'">Type @P_ to show/search products</small>
-    <i id="send-btn" class="fa fa-paper-plane" title="send message" aria-hidden="true" @click="sendMessage(selectedProductId)"></i>
+    <div class="product-selected" v-if="selectedProductId !== null"> 
+    <!-- <div class="product-selected">  -->
+      <!-- <i class="fa fa-image"></i> -->
+      <i class="fa fa-times close-icon" aria-hidden="true" @click="deleteSelectedProduct"></i>
+      <!-- <img width="auto" height="100"
+        src="https://dimg.dillards.com/is/image/DillardsZoom/zoom/perry-ellis-big--tall-herringbone-flat-front-pants/04137298_zi_light_beige.jpg" alt=""> -->
+      <img width="auto" height="100" v-if="selectedProductImage !== null" :src="selectedProductImage">
+      <i class="fa fa-image alt-image" v-else></i> 
+      <div class="arrow-down"></div>
+    </div>
+    <div class="tools-container">
+      <i id="attach-file" class="fa fa-paperclip" title="upload file" aria-hidden="true" @click="showImages()"></i>
+      <input type="text" class="form-control" placeholder="Type your message here..." 
+        v-model="newMessageInput" @keyup="keyupHandler" @keypress="keypressHandler" @input="manageInput"/>
+      <i id="send-btn" class="fa fa-paper-plane" title="send message" aria-hidden="true" @click="sendMessage(selectedProductId)"></i>
+      <small class="instruction" v-if="user.type === 'PARTNER'">Type @P_ to show/search products</small>
+    </div>
     <div class="products" v-if="products.showProducts === true">
       <messenger-products 
         :messageInput="newMessageInput"
@@ -21,6 +33,42 @@
 </template>
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
+.arrow-down {
+  position: absolute;
+  width: 0; 
+  height: 0; 
+  left: 25%;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent; 
+  border-top: 20px solid $secondary;
+}
+.close-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.close-icon:hover {
+  cursor: pointer;
+}
+.alt-image {
+  font-size: 90px;
+  padding-top: 10px;
+}
+.product-selected {
+  position: absolute;
+  top: -110px;
+  left: 50px;
+  border: 1px solid $secondary;
+}
+// product-selected img {
+//   width: 50px;
+//   height: 50px;
+// }
+.tools-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
 .products{
   position: absolute;
   height: calc(100vh - 300px);
@@ -49,6 +97,8 @@ small.instruction {
   height: 10vh;
   border-top: 1px solid $primary;
   background-color: $primary;
+  align-items: flex-end;
+  padding-bottom: 20px;
   position: relative;
 }
 .profile{
@@ -124,7 +174,8 @@ export default {
         searchedProducts: ''
       },
       updatedMessage: '',
-      selectedProductId: null
+      selectedProductId: null,
+      selectedProductImage: null
     }
   },
   props: ['group'],
@@ -223,9 +274,12 @@ export default {
       }
       this.selectedProductId = null
     },
-    selectedIdEventHandler(event){
-      this.selectedProductId = event
-      console.log(this.selectedProductId)
+    selectedIdEventHandler(product){
+      this.selectedProductId = product.id
+      this.selectedProductImage = product.image
+    },
+    deleteSelectedProduct(){
+      this.selectedProductId = null
     },
     showImages(){
       $('#browseImagesModal').modal('show')

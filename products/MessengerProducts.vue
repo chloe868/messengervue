@@ -133,8 +133,20 @@ export default {
       let updatedSearchValue = oldMessage + updatedValue
       this.$emit('searchProductEvent', {searchValue: this.searchValue, updatedValue: updatedSearchValue})
     },
-    selectedIdEventHandler(event){
-      this.$emit('selectedIdEvent', event)
+    selectedIdEventHandler(id){
+      let image = this.sortedData.find(data => {
+        return data.id === id
+      })
+      if(image.featured !== null){
+        image = this.config.BACKEND_URL + image.featured[0].url
+      }else{
+        image = null
+      }
+      let data = {
+        id: id,
+        image: image
+      }
+      this.$emit('selectedIdEvent', data)
     }
   },
   computed: {

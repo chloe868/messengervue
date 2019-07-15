@@ -39,6 +39,7 @@
   .products-container {
     display: flex;
     flex-direction: column;
+    margin-right: 10px;
   }
   .product-holder{
     width: 100%;
@@ -179,7 +180,6 @@ export default {
     },
     selectedIdHandler(id){
       this.$emit('selectedIdEvent', id)
-      console.log(this.data)
     }
   }
 }
