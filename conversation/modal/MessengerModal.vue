@@ -4,11 +4,11 @@
       <div class="listing">
         <div class="filter" v-if="data !== null">
           <div class="input-group">
-            <input type="text" class="form-control" :value="searchProduct" @keyup="searchProductHandler" placeholder="Search here...">
+            <input type="text" class="form-control" :value="searchItem" @keyup="searchItemHandler" placeholder="Search here...">
           </div>
         </div>
         <div class="results">
-          <products v-if="data !== null" :data="sortedData" :selectedId="selectedProduct ? selectedProduct.id : null" @selectedIdEvent="selectedIdEventHandler($event)"></products>
+          <products v-if="data !== null" :data="sortedData" :selectedId="selectedItem ? selectedItem.id : null" @selectedIdEvent="selectedIdEventHandler($event)"></products>
           <dynamic-empty v-if="data === null" :title="'No products yet!'" :action="'Please be back soon.'" :icon="'far fa-smile'" :iconColor="'text-primary'"></dynamic-empty>
         </div>
       </div>
@@ -97,7 +97,7 @@ export default {
     'products': require('components/increment/messengervue/conversation/modal/Products.vue'),
     'dynamic-empty': require('components/increment/generic/empty/EmptyDynamicIcon.vue')
   },
-  props: ['searchProduct', 'messageInput', 'selectedProduct'],
+  props: ['searchItem', 'messageInput', 'selectedItem', 'searchType'],
   methods: {
     redirect(parameter){
       ROUTER.push(parameter)
@@ -124,14 +124,24 @@ export default {
         }
       })
     },
-    searchProductHandler(event){
+    findIndex(type, str){
+      switch(type){
+        case 'products':
+          return str.lastIndexOf('@p_')
+        case 'templates':
+          return str.lastIndexOf('@t_')
+        default:
+          return -1
+      }
+    },
+    searchItemHandler(event){
       this.searchValue = event.target.value
       let updatedValue = this.searchValue.slice()
       let oldMessage = this.messageInput.slice()
-      let index = oldMessage.lastIndexOf('@p_')
+      let index = this.findIndex(this.searchType, oldMessage)
       oldMessage = oldMessage.slice(0, index + 3)
       let updatedSearchValue = oldMessage + updatedValue
-      this.$emit('searchProductEvent', {searchValue: this.searchValue, updatedValue: updatedSearchValue})
+      this.$emit('searchItemEvent', {searchValue: this.searchValue, updatedValue: updatedSearchValue})
     },
     selectedIdEventHandler(item){
       this.$emit('selectedIdEvent', item)
@@ -141,9 +151,9 @@ export default {
     sortedData(){
       let sorted = this.data.filter(product => {
         return (
-          product.title.toLowerCase().includes(this.searchProduct.toLowerCase()) ||
-          product.tags.toLowerCase().includes(this.searchProduct.toLowerCase()) ||
-          product.sku.toLowerCase().includes(this.searchProduct.toLowerCase())
+          product.title.toLowerCase().includes(this.searchItem.toLowerCase()) ||
+          product.tags.toLowerCase().includes(this.searchItem.toLowerCase()) ||
+          product.sku.toLowerCase().includes(this.searchItem.toLowerCase())
         )
       })
       if(sorted !== null && sorted.length > 0){

@@ -1,8 +1,8 @@
 <template>
   <div id="footer" class="holder">
-    <div class="product-selected" v-if="selectedProduct !== null"> 
-      <i class="fa fa-times close-icon" aria-hidden="true" @click="deleteSelectedProduct"></i>
-      <img width="auto" height="100" v-if="selectedProductImage !== null" :src="config.BACKEND_URL + selectedProductImage">
+    <div class="product-selected" v-if="selectedItem !== null"> 
+      <i class="fa fa-times close-icon" aria-hidden="true" @click="deleteSelectedItem"></i>
+      <img width="auto" height="100" v-if="selectedItem.featured !== null" :src="config.BACKEND_URL + selectedItem.featured[0].url">
       <i class="fa fa-image alt-image" v-else></i> 
       <div class="arrow-down"></div>
     </div>
@@ -10,15 +10,16 @@
       <i id="attach-file" class="fa fa-paperclip" title="upload file" aria-hidden="true" @click="showImages()"></i>
       <input type="text" class="form-control" placeholder="Type your message here..." 
         v-model="newMessageInput" @keyup="keyupHandler" @keypress="keypressHandler" @input="manageInput"/>
-      <i id="send-btn" class="fa fa-paper-plane" title="send message" aria-hidden="true" @click="sendMessage(selectedProduct)"></i>
+      <i id="send-btn" class="fa fa-paper-plane" title="send message" aria-hidden="true" @click="sendMessage(selectedItem)"></i>
       <small class="instruction" v-if="user.type === 'PARTNER'">Type @P_ to show/search products</small>
     </div>
-    <div class="products" v-if="products.showProducts === true">
+    <div class="products" v-if="messengerModal.showModal === true">
       <messenger-modal 
         :messageInput="newMessageInput"
-        :searchProduct="products.searchedProducts" 
-        :selectedProduct="selectedProduct"
-        @searchProductEvent="searchProductEventHandler($event)"
+        :searchItem="messengerModal.searchedItem" 
+        :selectedItem="selectedItem"
+        :searchType="searchType"
+        @searchItemEvent="searchItemEventHandler($event)"
         @selectedIdEvent="selectedIdEventHandler($event)">
       </messenger-modal>
     </div>
@@ -56,10 +57,6 @@
   left: 50px;
   border: 1px solid $secondary;
 }
-// product-selected img {
-//   width: 50px;
-//   height: 50px;
-// }
 .tools-container {
   display: flex;
   align-items: center;
@@ -76,14 +73,13 @@
   border: 1px solid $primary;
   padding: 10px;
   border-radius: 5px;
-  // overflow: auto;
 }
 small.instruction {
-    position: absolute;
-    bottom: 2px;
-    font-size: 8pt;
-    color: white;
-    left: 59px;
+  position: absolute;
+  bottom: 2px;
+  font-size: 8pt;
+  color: white;
+  left: 59px;
 }
 .holder{
   display: inline-flex;
@@ -165,13 +161,13 @@ export default {
       newMessageInput: '',
       prevNewMessageIndex: null,
       payload: null,
-      products: {
-        showProducts: false,
-        searchedProducts: ''
+      messengerModal: {
+        showModal: false,
+        searchedItem: ''
       },
       updatedMessage: '',
-      selectedProduct: null,
-      selectedProductImage: null
+      selectedItem: null,
+      searchType: null
     }
   },
   props: ['group'],
@@ -183,39 +179,56 @@ export default {
     redirect(parameter){
       ROUTER.push(parameter)
     },
+    findIndex(type, str){
+      switch(type){
+        case 'products':
+          return str.lastIndexOf('@p_')
+        case 'templates':
+          return str.lastIndexOf('@t_')
+        default:
+          return -1
+      }
+    },
     manageInput(event){
       this.newMessageInput = event.target.value
       if(this.newMessageInput && this.user.type === 'PARTNER'){
         let str = this.newMessageInput.slice()
         let lowStr = str.toLowerCase()
-        let trigger = lowStr.endsWith('@p') // triggers messenger-products
-        let n = lowStr.lastIndexOf('@p_')
-        let temp = n > -1 ? str.substring(n) : ''  // true if '@p_' is found
-        let searchProduct = temp.slice(3) // removing @P_ in searching
-        if(trigger && str !== ' ' || n > -1){
-          this.products = {
-            showProducts: true,
-            searchedProducts: searchProduct
+        let triggerProduct = lowStr.endsWith('@p') // triggers modal-products
+        let triggerTemplate = lowStr.endsWith('@t') // triggers modal-templates
+        if(triggerProduct){
+          this.searchType = 'products'
+        }
+        if(triggerTemplate){
+          this.searchType = 'templates'
+        }
+        let index = this.findIndex(this.searchType, lowStr)
+        let temp = index > -1 ? str.substring(index) : ''  // true if '@p_ or @t_' is found
+        let searchItem = temp.slice(3) // removing @P_ or @T_ in searching
+        if(triggerProduct && str !== ' ' || triggerTemplate && str !== ' ' || index > -1){
+          this.messengerModal = {
+            showModal: true,
+            searchedItem: searchItem
           }
         }else{
-          this.products = {
-            showProducts: false,
-            searchedProducts: ''
+          this.messengerModal = {
+            showModal: false,
+            searchedItem: ''
           }
         }
-        if(searchProduct[0] === ' '){
-          this.products = {
-            ...this.products,
-            showProducts: false
+        if(searchItem[0] === ' '){
+          this.messengerModal = {
+            ...this.messengerModal,
+            showModal: false
           }
         }
       }
     },
     keyupHandler(event){ // hide messenger-products when text-input is cleared
       if(event.target.value === ''){
-        this.products = {
-          showProducts: false,
-          searchedProducts: ''
+        this.messengerModal = {
+          showModal: false,
+          searchedItem: ''
         }
       }
     },
@@ -224,16 +237,16 @@ export default {
         this.sendMessage()
       }
     },
-    searchProductEventHandler(event){
-      this.products.searchedProducts = event.searchValue
+    searchItemEventHandler(event){
+      this.messengerModal.searchedItem = event.searchValue
       this.newMessageInput = event.updatedValue
     },
     sendMessage(){
       let messageType = 'text'
       let messageValue = null
-      if(this.selectedProduct !== null){
+      if(this.selectedItem !== null){
         messageType = 'product'
-        messageValue = this.selectedProduct.id
+        messageValue = this.selectedItem.id
       }
       if((this.newMessageInput !== '' || this.newMessageInput !== null) && this.group.new === false){
         let parameter = {
@@ -244,8 +257,8 @@ export default {
           payload: messageType,
           payload_value: messageValue
         }
-        if(this.selectedProduct !== null){
-          parameter['product'] = this.selectedProduct
+        if(this.selectedItem !== null){
+          parameter['product'] = this.selectedItem
         }
         this.APIRequest('messenger_messages/create', parameter).then(response => {
           if(response.data !== null){
@@ -271,23 +284,22 @@ export default {
           }
         })
       }
-      this.selectedProduct = null
+      this.selectedItem = null
     },
     selectedIdEventHandler(product){
-      this.selectedProduct = product
-      this.selectedProductImage = product.featured[0].url
-      // remove @p_...
+      this.selectedItem = product
+      // remove @p_... or @t_...
       let message = this.newMessageInput.slice().toLowerCase()
-      let n = message.lastIndexOf('@p')
-      let newMessage = message.slice(0, n)
-      this.products.showProducts = {
-        ...this.products,
-        showProducts: false
+      let index = this.findIndex(this.searchType, message)
+      let newMessage = message.slice(0, index)
+      this.messengerModal = {
+        ...this.messengerModal,
+        showModal: false
       }
       this.newMessageInput = newMessage.slice()
     },
-    deleteSelectedProduct(){
-      this.selectedProduct = null
+    deleteSelectedItem(){
+      this.selectedItem = null
     },
     showImages(){
       $('#browseImagesModal').modal('show')
