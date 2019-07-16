@@ -9,7 +9,7 @@
         </div>
         <div class="results">
           <products v-if="data !== null" :data="sortedData" :selectedId="selectedItem ? selectedItem.id : null" @selectedIdEvent="selectedIdEventHandler($event)"></products>
-          <dynamic-empty v-if="data === null" :title="'No products yet!'" :action="'Please be back soon.'" :icon="'far fa-smile'" :iconColor="'text-primary'"></dynamic-empty>
+          <dynamic-empty v-if="data === null" :title="`No ${this.searchType} yet!`" :action="'Please be back soon.'" :icon="'far fa-smile'" :iconColor="'text-primary'"></dynamic-empty>
         </div>
       </div>
     </div>
@@ -97,7 +97,7 @@ export default {
     'products': require('components/increment/messengervue/conversation/modal/Products.vue'),
     'dynamic-empty': require('components/increment/generic/empty/EmptyDynamicIcon.vue')
   },
-  props: ['searchItem', 'messageInput', 'selectedItem', 'searchType'],
+  props: ['searchItem', 'messageInput', 'selectedItem', 'modalTriggers', 'searchType'],
   methods: {
     redirect(parameter){
       ROUTER.push(parameter)
@@ -117,22 +117,25 @@ export default {
         account_id: this.user.userID
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('products/retrieve', parameter).then(response => {
+      this.APIRequest(`${this.searchType}/retrieve`, parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.data = response.data
         }
       })
     },
-    findIndex(type, str){
-      switch(type){
-        case 'products':
-          return str.lastIndexOf('@p_')
-        case 'templates':
-          return str.lastIndexOf('@t_')
-        default:
-          return -1
+    findIndex(type, str){ // for modal search
+      let trigger = -1
+      this.modalTriggers.map(obj => {
+        if(obj.type === type){
+          trigger = obj.trigger
+          return
+        }
+      })
+      if(trigger !== -1){
+        trigger = trigger + '_'
       }
+      return trigger !== -1 ? str.lastIndexOf(trigger) : -1
     },
     searchItemHandler(event){
       this.searchValue = event.target.value

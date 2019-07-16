@@ -19,6 +19,7 @@
         :searchItem="messengerModal.searchedItem" 
         :selectedItem="selectedItem"
         :searchType="searchType"
+        :modalTriggers="modalTriggers"
         @searchItemEvent="searchItemEventHandler($event)"
         @selectedIdEvent="selectedIdEventHandler($event)">
       </messenger-modal>
@@ -167,7 +168,11 @@ export default {
       },
       updatedMessage: '',
       selectedItem: null,
-      searchType: null
+      modalTriggers: [
+        {type: 'products', trigger: '@p'},
+        {type: 'templates', trigger: '@t'}
+      ],
+      searchType: null // search type for modal 'products or templates..'
     }
   },
   props: ['group'],
@@ -179,33 +184,38 @@ export default {
     redirect(parameter){
       ROUTER.push(parameter)
     },
-    findIndex(type, str){
-      switch(type){
-        case 'products':
-          return str.lastIndexOf('@p_')
-        case 'templates':
-          return str.lastIndexOf('@t_')
-        default:
-          return -1
+    findIndex(type, str){ // for modal search
+      let trigger = -1
+      this.modalTriggers.map(obj => {
+        if(obj.type === type){
+          trigger = obj.trigger
+          return
+        }
+      })
+      if(trigger !== -1){
+        trigger = trigger + '_'
       }
+      return trigger !== -1 ? str.lastIndexOf(trigger) : -1
     },
     manageInput(event){
       this.newMessageInput = event.target.value
       if(this.newMessageInput && this.user.type === 'PARTNER'){
         let str = this.newMessageInput.slice()
         let lowStr = str.toLowerCase()
-        let triggerProduct = lowStr.endsWith('@p') // triggers modal-products
-        let triggerTemplate = lowStr.endsWith('@t') // triggers modal-templates
-        if(triggerProduct){
-          this.searchType = 'products'
+        let trigger = null
+        this.modalTriggers.map(obj => {
+          if(lowStr.endsWith(obj.trigger)){ // check if @p or @t is found
+            trigger = obj // set trigger
+            return
+          }
+        })
+        if(trigger){
+          this.searchType = trigger.type
         }
-        if(triggerTemplate){
-          this.searchType = 'templates'
-        }
-        let index = this.findIndex(this.searchType, lowStr)
+        let index = this.findIndex(this.searchType, lowStr)// finding index of @p_ or @p_ [ '_' for searching ]
         let temp = index > -1 ? str.substring(index) : ''  // true if '@p_ or @t_' is found
         let searchItem = temp.slice(3) // removing @P_ or @T_ in searching
-        if(triggerProduct && str !== ' ' || triggerTemplate && str !== ' ' || index > -1){
+        if(trigger && str !== ' ' || index > -1){
           this.messengerModal = {
             showModal: true,
             searchedItem: searchItem
