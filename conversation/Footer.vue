@@ -1,11 +1,7 @@
 <template>
   <div id="footer" class="holder">
     <div class="product-selected" v-if="selectedProduct !== null"> 
-    <!-- <div class="product-selected">  -->
-      <!-- <i class="fa fa-image"></i> -->
       <i class="fa fa-times close-icon" aria-hidden="true" @click="deleteSelectedProduct"></i>
-      <!-- <img width="auto" height="100"
-        src="https://dimg.dillards.com/is/image/DillardsZoom/zoom/perry-ellis-big--tall-herringbone-flat-front-pants/04137298_zi_light_beige.jpg" alt=""> -->
       <img width="auto" height="100" v-if="selectedProductImage !== null" :src="config.BACKEND_URL + selectedProductImage">
       <i class="fa fa-image alt-image" v-else></i> 
       <div class="arrow-down"></div>
@@ -18,13 +14,13 @@
       <small class="instruction" v-if="user.type === 'PARTNER'">Type @P_ to show/search products</small>
     </div>
     <div class="products" v-if="products.showProducts === true">
-      <messenger-products 
+      <messenger-modal 
         :messageInput="newMessageInput"
         :searchProduct="products.searchedProducts" 
         :selectedProduct="selectedProduct"
         @searchProductEvent="searchProductEventHandler($event)"
         @selectedIdEvent="selectedIdEventHandler($event)">
-      </messenger-products>
+      </messenger-modal>
     </div>
     <browse-images-modal :object="user.profile" v-if="user.profile !== null"></browse-images-modal>
     <browse-images-modal :object="newProfile" v-if="user.profile === null"></browse-images-modal>
@@ -151,9 +147,9 @@ span i:hover{
 }
 </style>
 <script>
-import ROUTER from '../../../../router'
-import AUTH from '../../../../services/auth'
-import CONFIG from '../../../../config.js'
+import ROUTER from 'src/router'
+import AUTH from 'src/services/auth'
+import CONFIG from 'src/config.js'
 export default {
   mounted(){
   },
@@ -181,7 +177,7 @@ export default {
   props: ['group'],
   components: {
     'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue'),
-    'messenger-products': require('components/increment/messengervue/products/MessengerProducts.vue')
+    'messenger-modal': require('components/increment/messengervue/conversation/modal/MessengerModal.vue')
   },
   methods: {
     redirect(parameter){

@@ -94,7 +94,7 @@ export default {
     }
   },
   components: {
-    'products': require('components/increment/messengervue/products/Products.vue'),
+    'products': require('components/increment/messengervue/conversation/modal/Products.vue'),
     'dynamic-empty': require('components/increment/generic/empty/EmptyDynamicIcon.vue')
   },
   props: ['searchProduct', 'messageInput', 'selectedProduct'],
