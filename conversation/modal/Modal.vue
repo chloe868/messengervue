@@ -8,7 +8,7 @@
           </div>
         </div>
         <div class="results">
-          <products v-if="data !== null" :data="sortedData" :selectedId="selectedItem ? selectedItem.id : null" @selectedIdEvent="selectedIdEventHandler($event)"></products>
+          <products v-if="data !== null && searchType === 'products'" :data="sortedData" :selectedId="selectedItem ? selectedItem.id : null" @selectedIdEvent="selectedIdEventHandler($event)"></products>
           <dynamic-empty v-if="data === null" :title="`No ${this.searchType} yet!`" :action="'Please be back soon.'" :icon="'far fa-smile'" :iconColor="'text-primary'"></dynamic-empty>
         </div>
       </div>
@@ -70,7 +70,7 @@
 .results {
   overflow-y: auto !important;
   /* height: 438px; */
-  height: calc(100vh - 362px) !important;
+  height: calc(95vh - 362px) !important;
 }
 
 </style>
@@ -103,18 +103,24 @@ export default {
       ROUTER.push(parameter)
     },
     retrieve(){
-      let parameter = {
-        condition: [{
-          value: 'published',
-          column: 'status',
-          clause: '='
-        },
-        {
-          value: this.user.userID,
-          column: 'account_id',
-          clause: '='
-        }],
-        account_id: this.user.userID
+      let parameter = null
+      switch(this.searchType){
+        case 'products':
+          parameter = {
+            condition: [{
+              value: 'published',
+              column: 'status',
+              clause: '='
+            },
+            {
+              value: this.user.userID,
+              column: 'account_id',
+              clause: '='
+            }],
+            account_id: this.user.userID
+          }
+          break
+        default: parameter = null
       }
       $('#loading').css({display: 'block'})
       this.APIRequest(`${this.searchType}/retrieve`, parameter).then(response => {
@@ -132,9 +138,6 @@ export default {
           return
         }
       })
-      if(trigger !== -1){
-        trigger = trigger + '_'
-      }
       return trigger !== -1 ? str.lastIndexOf(trigger) : -1
     },
     searchItemHandler(event){
@@ -142,6 +145,9 @@ export default {
       let updatedValue = this.searchValue.slice()
       let oldMessage = this.messageInput.slice()
       let index = this.findIndex(this.searchType, oldMessage)
+      if(oldMessage[oldMessage.length - 1] !== '_'){
+        oldMessage = oldMessage + '_'
+      }
       oldMessage = oldMessage.slice(0, index + 3)
       let updatedSearchValue = oldMessage + updatedValue
       this.$emit('searchItemEvent', {searchValue: this.searchValue, updatedValue: updatedSearchValue})
@@ -152,15 +158,18 @@ export default {
   },
   computed: {
     sortedData(){
-      let sorted = this.data.filter(product => {
-        return (
-          product.title.toLowerCase().includes(this.searchItem.toLowerCase()) ||
-          product.tags.toLowerCase().includes(this.searchItem.toLowerCase()) ||
-          product.sku.toLowerCase().includes(this.searchItem.toLowerCase())
-        )
-      })
-      if(sorted !== null && sorted.length > 0){
-        this.selectedId = sorted[0].id
+      let sorted = null
+      switch(this.searchType){
+        case 'products':
+          sorted = this.data.filter(product => {
+            return (
+              product.title.toLowerCase().includes(this.searchItem.toLowerCase()) ||
+              product.tags.toLowerCase().includes(this.searchItem.toLowerCase()) ||
+              product.sku.toLowerCase().includes(this.searchItem.toLowerCase())
+            )
+          })
+          break
+        default: sorted = null
       }
       return sorted
     }

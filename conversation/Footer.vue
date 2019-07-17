@@ -1,7 +1,7 @@
 <template>
   <div id="footer" class="holder">
     <div class="product-selected" v-if="selectedItem !== null"> 
-      <i class="fa fa-times close-icon" aria-hidden="true" @click="deleteSelectedItem"></i>
+      <i class="fa fa-times close close-icon" aria-hidden="true" @click="deleteSelectedItem"></i>
       <img width="auto" height="100" v-if="selectedItem.featured !== null" :src="config.BACKEND_URL + selectedItem.featured[0].url">
       <i class="fa fa-image alt-image" v-else></i> 
       <div class="arrow-down"></div>
@@ -14,6 +14,7 @@
       <small class="instruction" v-if="user.type === 'PARTNER'">Type @P_ to show/search products</small>
     </div>
     <div class="products" v-if="messengerModal.showModal === true">
+      <!-- <i class="fa fa-times close close-icon close-modal" aria-hidden="true" @click="deleteSelectedItem"></i> -->
       <messenger-modal 
         :messageInput="newMessageInput"
         :searchItem="messengerModal.searchedItem" 
@@ -40,12 +41,17 @@
   border-right: 20px solid transparent; 
   border-top: 20px solid $secondary;
 }
+// .close-modal {
+//   position: absolute;
+//   top: -30px;
+//   right: 10px;
+// }
 .close-icon {
   position: absolute;
   top: 0;
   right: 0;
 }
-.close-icon:hover {
+.close:hover {
   cursor: pointer;
 }
 .alt-image {
@@ -65,7 +71,7 @@
 }
 .products{
   position: absolute;
-  height: calc(100vh - 300px);
+  height: calc(95vh - 300px);
   width: 300px;
   z-index: 10;
   bottom: 12vh;
@@ -169,22 +175,22 @@ export default {
       updatedMessage: '',
       selectedItem: null,
       modalTriggers: [
-        {type: 'products', trigger: '@p'},
+        {type: 'products', trigger: '@p'}, // [type] is table-name
         {type: 'templates', trigger: '@t'}
       ],
-      searchType: null // search type for modal 'products or templates..'
+      searchType: null // search type for modal
     }
   },
   props: ['group'],
   components: {
     'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue'),
-    'messenger-modal': require('components/increment/messengervue/conversation/modal/MessengerModal.vue')
+    'messenger-modal': require('components/increment/messengervue/conversation/modal/Modal.vue')
   },
   methods: {
     redirect(parameter){
       ROUTER.push(parameter)
     },
-    findIndex(type, str){ // for modal search
+    findIndex(type, str, flag){ // for modal search
       let trigger = -1
       this.modalTriggers.map(obj => {
         if(obj.type === type){
@@ -192,7 +198,7 @@ export default {
           return
         }
       })
-      if(trigger !== -1){
+      if(flag){ // flag 1 to fix searching in searchbar with using only @p instead of @p_
         trigger = trigger + '_'
       }
       return trigger !== -1 ? str.lastIndexOf(trigger) : -1
@@ -204,7 +210,7 @@ export default {
         let lowStr = str.toLowerCase()
         let trigger = null
         this.modalTriggers.map(obj => {
-          if(lowStr.endsWith(obj.trigger)){ // check if @p or @t is found
+          if(lowStr.endsWith(obj.trigger)){ // check if trigger is found
             trigger = obj // set trigger
             return
           }
@@ -212,25 +218,21 @@ export default {
         if(trigger){
           this.searchType = trigger.type
         }
-        let index = this.findIndex(this.searchType, lowStr)// finding index of @p_ or @p_ [ '_' for searching ]
+        // trigger search =>  trigger + '_'  ex. @p_  or  @t_['search query']
+        let index = this.findIndex(this.searchType, lowStr, 1)// finding index of the trigger + '_' for searching ( '@p_' )
         let temp = index > -1 ? str.substring(index) : ''  // true if '@p_ or @t_' is found
         let searchItem = temp.slice(3) // removing @P_ or @T_ in searching
+        let clear = { showModal: false, searchedItem: '' }
         if(trigger && str !== ' ' || index > -1){
           this.messengerModal = {
             showModal: true,
             searchedItem: searchItem
           }
         }else{
-          this.messengerModal = {
-            showModal: false,
-            searchedItem: ''
-          }
+          this.messengerModal = {...clear}
         }
         if(searchItem[0] === ' '){
-          this.messengerModal = {
-            ...this.messengerModal,
-            showModal: false
-          }
+          this.messengerModal = {...clear}
         }
       }
     },
@@ -300,7 +302,7 @@ export default {
       this.selectedItem = product
       // remove @p_... or @t_...
       let message = this.newMessageInput.slice().toLowerCase()
-      let index = this.findIndex(this.searchType, message)
+      let index = this.findIndex(this.searchType, message, 0)
       let newMessage = message.slice(0, index)
       this.messengerModal = {
         ...this.messengerModal,
