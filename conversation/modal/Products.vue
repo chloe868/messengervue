@@ -157,18 +157,6 @@ export default {
     redirect(parameter){
       ROUTER.push(parameter)
     },
-    addToWishlist(id){
-      let parameter = {
-        payload: 'product',
-        payload_value: id,
-        account_id: this.user.userID
-      }
-      $('#loading').css({display: 'block'})
-      this.APIRequest('wishlists/create', parameter).then(response => {
-        $('#loading').css({display: 'none'})
-        this.$parent.retrieve()
-      })
-    },
     selectedIdHandler(item){
       this.$emit('selectedIdEvent', item)
     }

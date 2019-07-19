@@ -14,7 +14,7 @@
       <small class="instruction" v-if="user.type === 'PARTNER'">Type @P_ to show/search products</small>
     </div>
     <div class="products" v-if="messengerModal.showModal === true">
-      <!-- <i class="fa fa-times close close-icon close-modal" aria-hidden="true" @click="deleteSelectedItem"></i> -->
+      <i class="fa fa-times-circle close close-modal" aria-hidden="true" @click="selectedIdEventHandler(null)"></i>
       <messenger-modal 
         :messageInput="newMessageInput"
         :searchItem="messengerModal.searchedItem" 
@@ -41,13 +41,16 @@
   border-right: 20px solid transparent; 
   border-top: 20px solid $secondary;
 }
-// .close-modal {
-//   position: absolute;
-//   top: -30px;
-//   right: 10px;
-// }
+.close-modal {
+  position: absolute;
+  top: -35px;
+  right: 0;
+  font-size: 30px;
+  color: red;
+}
 .close-icon {
   position: absolute;
+  font-size: 15px;
   top: 0;
   right: 0;
 }
@@ -155,6 +158,7 @@ import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 export default {
   mounted(){
+    this.retrieveParams(this.$route.params)
   },
   data(){
     return {
@@ -189,6 +193,29 @@ export default {
   methods: {
     redirect(parameter){
       ROUTER.push(parameter)
+    },
+    retrieveParams(params){
+      if(params.payload && params.payloadValue){
+        let parameter = {
+          condition: [{
+            value: 'published',
+            column: 'status',
+            clause: '='
+          },
+          {
+            value: params.payloadValue,
+            column: 'code',
+            clause: '='
+          }]
+        }
+        $('#loading').css({display: 'block'})
+        this.APIRequest(`${params.payload}s/retrieve`, parameter).then(response => {
+          $('#loading').css({display: 'none'})
+          if(response.data.length > 0){
+            this.selectedItem = response.data[0]
+          }
+        })
+      }
     },
     findIndex(type, str, flag){ // for modal search
       let trigger = -1
@@ -299,14 +326,16 @@ export default {
       this.selectedItem = null
     },
     selectedIdEventHandler(product){
-      this.selectedItem = product
+      if(product !== null){
+        this.selectedItem = product
+      }
       // remove @p_... or @t_...
       let message = this.newMessageInput.slice().toLowerCase()
       let index = this.findIndex(this.searchType, message, 0)
       let newMessage = message.slice(0, index)
       this.messengerModal = {
-        ...this.messengerModal,
-        showModal: false
+        showModal: false,
+        searchedItem: ''
       }
       this.newMessageInput = newMessage.slice()
     },
