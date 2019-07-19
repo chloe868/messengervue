@@ -206,7 +206,8 @@ export default {
             value: params.payloadValue,
             column: 'code',
             clause: '='
-          }]
+          }],
+          account_id: this.user.userID
         }
         $('#loading').css({display: 'block'})
         this.APIRequest(`${params.payload}s/retrieve`, parameter).then(response => {
