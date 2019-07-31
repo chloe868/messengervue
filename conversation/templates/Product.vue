@@ -209,6 +209,7 @@
 .header .profile i{
   line-height: 30px;
   font-size: 30px;
+  color: $secondary !important;
 }
 .header .details{
   float: left;
@@ -240,6 +241,7 @@
 .header-right .profile i{
   line-height: 30px;
   font-size: 30px;
+  color: $primary !important;
 }
 .header-right .details{
   float: right;

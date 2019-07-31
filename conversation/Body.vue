@@ -8,7 +8,7 @@
             <div class="header">
               <div class="profile">
                 <img :src="config.BACKEND_URL + item.account.profile.url" v-if="item.account.profile !== null">
-                <i id="icon-left" class="fa fa-user-circle-o text-green" v-else></i>
+                <i class="fa fa-user-circle-o text-green" v-else></i>
               </div>
               <span class="details" v-if="item.account !== null">
                 <label><b>{{item.account.username}}</b></label>
@@ -28,7 +28,7 @@
             <div class="header-right">
               <div class="profile">
                 <img :src="config.BACKEND_URL + item.account.profile.url" v-if="item.account.profile !== null">
-                <i id="icon-right" class="fa fa-user-circle-o text-green" v-else></i>
+                <i class="fa fa-user-circle-o text-green" v-else></i>
               </div>
               <span class="details" v-if="item.account !== null">
                 <label><b>{{item.account.username}}</b></label>
@@ -51,12 +51,6 @@
 </template>
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
-#icon-left {
-  color: $secondary !important;
-}
-#icon-right {
-  color: $primary !important;
-}
 .content-product {
   border: 1px solid $primary;
   float: right !important;
@@ -105,6 +99,7 @@
 .header .profile i{
   line-height: 30px;
   font-size: 30px;
+  color: $secondary !important;
 }
 .header .details{
   float: left;
@@ -136,6 +131,7 @@
 .header-right .profile i{
   line-height: 30px;
   font-size: 30px;
+  color: $primary !important;
 }
 .header-right .details{
   float: right;
