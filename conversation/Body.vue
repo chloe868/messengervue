@@ -73,7 +73,8 @@
   width: 98%;
   min-height: 10px;
   overflow-y: hidden;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  margin-top: 5px;
   margin-left: 1%;
   margin-right: 1%;
 }
