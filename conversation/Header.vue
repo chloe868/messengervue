@@ -16,6 +16,7 @@
 }
 #icon-call {
     margin-right: 25px;
+    background-color: $primary !important;
 }
 #icon-call:hover {
     cursor: pointer;
@@ -56,7 +57,7 @@ i{
   font-size: 30px;
   line-height: 8vh;
   float: left;
-  color: #22b173;
+  color: $primary;
 }
 .fa-chevron-right{
   display: none;

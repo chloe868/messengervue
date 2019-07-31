@@ -8,11 +8,12 @@
       Printing Partners
       <!-- <i class="fa fa-pencil-square-o pull-right text-white create-new-group"></i> -->
     </div>
-    <m-card v-for="partner, index in partners" :key="'B' + partner.id" :group="partner" :index="index" :moduleText="'partners'"></m-card>
-    <m-card v-for="group, index in groups" :key="'A' + group.id" :group="group" :index="index" :moduleText="'groups'"></m-card>
+    <m-card v-for="(partner, index) in partners" :key="'B' + partner.id" :group="partner" :index="index" :moduleText="'partners'"></m-card>
+    <m-card v-for="(group, index) in groups" :key="'A' + group.id" :group="group" :index="index" :moduleText="'groups'"></m-card>
   </div>
 </template>
-<style scoped>
+<style scoped lang="scss">
+@import "~assets/style/colors.scss";
 .holder{
   width: 100%;
   float: right;
@@ -23,7 +24,7 @@
   height: 50px;
   line-height: 50px;
   padding-left: 10px;
-  background: #22b173;
+  background: $primary;
   color: #fff;
 }
 .create-new-group{
@@ -32,13 +33,13 @@
 }
 .create-new-group:hover{
   cursor: pointer;
-  color: #eee;
+  color: $white;
 }
 </style>
 <script>
-import ROUTER from '../../../../router'
-import AUTH from '../../../../services/auth'
-import CONFIG from '../../../../config.js'
+import ROUTER from 'src/router'
+import AUTH from 'src/services/auth'
+import CONFIG from 'src/config.js'
 import axios from 'axios'
 export default {
   mounted(){

@@ -9,16 +9,17 @@
     
   </div>
 </template>
-<style scoped>
+<style scoped lang="scss">
+@import "~assets/style/colors.scss";
 .holder{
   width: 100%;
   float: left;
   height: 50px;
   padding-left: 5px;
-  border-bottom: solid 1px #eee;
+  border-bottom: solid 1px $primary;
 }
 .active-card{
-  background: #ddd;
+  background: $secondary;
 }
 .profile{
   width: 40px;
@@ -39,12 +40,12 @@ i{
   font-size: 30px;
   line-height: 50px;
   float: left;
-  color: #22b173;
+  color: $primary;
 }
 
 .holder:hover{
   cursor: pointer;
-  background: #ddd;
+  background: $secondary;
 }
 
 </style>

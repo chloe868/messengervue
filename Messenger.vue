@@ -32,7 +32,7 @@
   float: left;
   height: 90vh;
   overflow-y:scroll;
-  border-left: solid 1px #22b173;
+  border-left: solid 1px $primary;
 }
 
 .users::-webkit-scrollbar { width: 0; }
