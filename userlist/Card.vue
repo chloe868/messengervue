@@ -19,7 +19,7 @@
   border-bottom: solid 1px $primary;
 }
 .active-card{
-  background: $secondary;
+  background: $gray;
 }
 .profile{
   width: 40px;
@@ -45,7 +45,7 @@ i{
 
 .holder:hover{
   cursor: pointer;
-  background: $secondary;
+  background: $hover;
 }
 
 </style>
