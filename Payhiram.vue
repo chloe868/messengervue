@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <empty v-if="groups === null && partners === null" :title="'You do not have conversation right now.'" :action="'Wait for your customer to message you.'"></empty>
+    <empty-dynamic v-if="groups === null && partners === null" :icon="'fa fa-smile-o'" :iconColor="'text-primary'" :title="'Invalid transaction code.'" :action="'Wait for peers to contact you!'"></empty-dynamic>
   </div>
 </template>
 <style scoped lang="scss">
@@ -18,7 +18,7 @@
 .messenger-holder{
   width: 100%;
   float: left;
-  border: 1px solid $primary;
+  border: 1px solid #eee;
 }
 .conversation{
   width: 70%;
@@ -32,7 +32,7 @@
   float: left;
   height: 90vh;
   overflow-y:scroll;
-  border-left: solid 1px $primary;
+  border-left: solid 1px #eee;
 }
 
 .users::-webkit-scrollbar { width: 0; }
@@ -79,9 +79,9 @@ export default {
   },
   props: ['params'],
   components: {
-    'conversation': require('components/increment/messengervue/conversation/Conversation.vue'),
+    'conversation': require('components/increment/messengervue/conversationPayhiram/Conversation.vue'),
     'groups': require('components/increment/messengervue/userlist/Groups.vue'),
-    'empty': require('components/increment/generic/empty/Empty.vue')
+    'empty-dynamic': require('components/increment/generic/empty/EmptyDynamicIcon.vue')
   },
   watch: {
     '$route.params.username': function(){
@@ -118,37 +118,15 @@ export default {
     retrieve(username){
       let parameter = {
         account_id: this.user.userID,
-        account_type: this.user.type,
-        username: username
+        code: this.$route.params.code
       }
       this.APIRequest('custom_messenger_groups/retrieve', parameter).done(response => {
         this.groups = response.data
         this.partners = response.accounts
+        this.prevModuleSelected = 'groups'
         setTimeout(() => {
-          if(username){
-            let indexGroup = this.checkIfExistUsername(username, this.groups)
-            let flag = false
-            if(indexGroup !== null){
-              this.prevModuleSelected = 'groups'
-              this.makeActiveCard(indexGroup, 'groups')
-              flag = true
-            }else{
-              let indexPartner = this.checkIfExistUsername(username, this.partners)
-              if(indexPartner !== null){
-                this.prevModuleSelected = 'partners'
-                this.makeActiveCard(indexPartner, 'partners')
-                flag = true
-              }
-            }
-            if(flag === false && this.groups !== null){
-              this.prevModuleSelected = 'groups'
-              this.makeActiveCard(0, 'groups')
-            }else if(flag === false && this.partners !== null){
-              this.prevModuleSelected = 'partners'
-              this.makeActiveCard(response.active, 'partners')
-            }
-          }
-        }, 1000)
+          this.makeActiveCard(response.active, 'groups')
+        }, 100)
       })
     },
     checkIfExistUsername(username, list){
@@ -174,39 +152,12 @@ export default {
             this.$children[i].conversations = null
           }
         }
-      }else if(moduleText === 'partners'){
-        this.groupId = null
-        this.selectedGroupData = this.partners[index]
-        AUTH.messenger.messengerGroupId = parseInt(this.partners[index].id)
-        for (i = 0; i < this.$children.length; i++) {
-          if(this.$children[i].$el.id === 'groupConversation'){
-            this.$children[i].newFlag = true
-            this.$children[i].conversations = null
-            this.$children[i].retrieve()
-          }
-        }
       }
     },
     makeActiveCard(index, moduleText){
-      if(moduleText === 'groups' && this.prevModuleSelected === 'groups'){
-        if(this.selectedIndex !== index){
-          this.groups[this.selectedIndex].flag = false
-          this.groups[index].flag = true
-        }
-      }
-      if(moduleText === 'groups' && this.prevModuleSelected === 'partners'){
-        this.partners[this.selectedIndex].flag = false
-        this.groups[index].flag = true
-      }
-      if(moduleText === 'partners' && this.prevModuleSelected === 'groups'){
+      if(this.selectedIndex !== index){
         this.groups[this.selectedIndex].flag = false
-        this.partners[index].flag = true
-      }
-      if(moduleText === 'partners' && this.prevModuleSelected === 'partners'){
-        if(this.selectedIndex !== index){
-          this.groups[this.selectedIndex].flag = false
-          this.groups[index].flag = true
-        }
+        this.groups[index].flag = true
       }
       this.prevModuleSelected = moduleText
       this.selectedGroup(index, moduleText)

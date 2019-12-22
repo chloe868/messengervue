@@ -3,7 +3,6 @@
     <img :src="config.BACKEND_URL + group.title.profile.url" class="profile" v-if="group.title.profile !== null">
     <i class="fa fa-user-circle-o" v-else></i>
     <label id="user-name">{{group.title.username}}
-      <!-- <span class="badge badge-primary">{{group.total_members}}</span> -->
     </label> 
     <!-- <i id="icon-call" class="fa fa-phone bg-primary icons" @click="callHandler(group.title.id)"></i> -->
     <i class="fa fa-chevron-right" @click="setMobileView()"></i>
@@ -33,7 +32,7 @@
 .messenger-header-holder{
   width: 100%;
   float: left;
-  height: 8vh;
+  height: 50px;
   padding-left: 5px;
   border-bottom: solid 1px #eee;
   padding-left: 10px;

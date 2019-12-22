@@ -16,10 +16,10 @@
   float: left;
   height: 50px;
   padding-left: 5px;
-  border-bottom: solid 1px $primary;
+  border-bottom: solid 1px #eee;
 }
 .active-card{
-  background: $gray;
+  background: #eee;
 }
 .profile{
   width: 40px;
@@ -50,9 +50,9 @@ i{
 
 </style>
 <script>
-import ROUTER from '../../../../router'
-import AUTH from '../../../../services/auth'
-import CONFIG from '../../../../config.js'
+import ROUTER from 'src/router'
+import AUTH from 'src/services/auth'
+import CONFIG from 'src/config.js'
 export default {
   data(){
     return {
