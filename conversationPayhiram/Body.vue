@@ -48,7 +48,7 @@
     <div class="conversations" v-if="parseInt(group.account_id) === user.userID">
       <div class="message-row">
         <div class="template">
-          <div class="content-right">
+          <div class="incre-row text-center">
             <label class="text-primary">Hi <b>{{user.username}}!</b> Allow validation by clicking the options below.</label>
             <span class="incre-row">
               <button class="btn btn-white text-primary">Receiver's ID</button>
@@ -60,15 +60,29 @@
       </div>
       <div class="message-row">
         <div class="template">
-          <div class="content-right">
+          <div class="incre-row text-center">
             <label class="text-primary">Hi <b>{{user.username}}!</b> Validation are completed, click to proceed:</label>
             <span class="incre-row">
-              <button class="btn btn-white text-primary">Transfer</button>
+              <button class="btn btn-white text-primary" @click="transfer()">Transfer</button>
             </span>
           </div>
         </div>
       </div>
     </div>
+    <div class="conversations">
+      <div class="message-row">
+        <div class="template">
+          <div class="incre-row text-center">
+            <label class="text-primary">Hi <b>{{user.username}}!</b> Please help <b>{{group.title.username}}</b> by giving a review.</label>
+            <span class="incre-row">
+              <button class="btn btn-white text-primary" @click="review()">Submit review and rating</button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <add-ratings ref="addRatings"></add-ratings>
+    <authenticate-otp ref="authenticateOTP"></authenticate-otp>
   </div>
 </template>
 <style scoped lang="scss">
@@ -208,12 +222,24 @@ export default {
     }
   },
   components: {
-    'product-message': require('components/increment/messengervue/conversationPayhiram/templates/Product.vue')
+    'product-message': require('components/increment/messengervue/conversationPayhiram/templates/Product.vue'),
+    'add-ratings': require('components/increment/generic/rating/Create.vue'),
+    'authenticate-otp': require('modules/transfer/Otp.vue')
   },
   props: ['conversations', 'group'],
   methods: {
     redirect(parameter){
       ROUTER.push(parameter)
+    },
+    review(){
+      let payload = 'profile'
+      let payloadValue = this.group.title.id
+      if(payloadValue !== null){
+        this.$refs.addRatings.show(payload, payloadValue)
+      }
+    },
+    transfer(){
+      this.$refs.authenticateOTP.show()
     }
   }
 }
