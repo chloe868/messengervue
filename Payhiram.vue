@@ -60,7 +60,7 @@ import axios from 'axios'
 export default {
   mounted(){
     AUTH.checkPlan()
-    this.retrieve(this.$route.params.username ? this.$route.params.username : '')
+    this.retrieve(null)
   },
   data(){
     return {
@@ -115,7 +115,7 @@ export default {
         })
       }
     },
-    retrieve(username){
+    retrieve(active){
       let parameter = {
         account_id: this.user.userID,
         code: this.$route.params.code
@@ -125,7 +125,7 @@ export default {
         this.partners = response.accounts
         this.prevModuleSelected = 'groups'
         setTimeout(() => {
-          this.makeActiveCard(response.active, 'groups')
+          this.makeActiveCard(active === null ? response.active : this.selectedIndex, 'groups')
         }, 100)
       })
     },

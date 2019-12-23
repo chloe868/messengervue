@@ -4,7 +4,7 @@
     <div class="conversation-messages-holder">
       <c-body :conversations="auth.messenger.messages" :group="group" v-if="group !== null"></c-body>
     </div>
-    <c-footer :group="group" v-if="group !== null" @changeGroupEvent="changedGroupHandler($event)"></c-footer>
+    <c-footer :group="group" v-if="group !== null && parseInt(group.request.status) < 2" @changeGroupEvent="changedGroupHandler($event)"></c-footer>
   </div>
 </template>
 <style scoped lang="scss">
@@ -115,6 +115,9 @@ export default {
     },
     changedGroupHandler(data){
       this.$emit('changeGroupEvent', data)
+    },
+    retrieveParent(){
+      this.$parent.retrieve(true)
     }
   }
 }

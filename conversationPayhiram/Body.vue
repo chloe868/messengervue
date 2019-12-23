@@ -46,19 +46,17 @@
       </div>
     </div>
     <div class="conversations" v-if="parseInt(group.account_id) === user.userID">
-      <div class="message-row">
+      <div class="message-row" v-if="group.validations.complete_status === false">
         <div class="template">
           <div class="incre-row text-center">
             <label class="text-primary">Hi <b>{{user.username}}!</b> Allow validation by clicking the options below.</label>
             <span class="incre-row">
-              <button class="btn btn-white text-primary">Receiver's ID</button>
-              <button class="btn btn-white text-primary">Receiver's signature</button>
-              <button class="btn btn-white text-primary">Receiver's photo</button>
+              <button class="btn btn-white text-primary" @click="addValidation(item.payload)" v-for="(item, index) in group.validations.requirements" :key="index" v-if="item.validations === null" style="margin-right: 10px;">{{item.title}}</button>
             </span>
           </div>
         </div>
       </div>
-      <div class="message-row">
+      <div class="message-row" v-if="group.validations.transfer_status === 'approved'">
         <div class="template">
           <div class="incre-row text-center">
             <label class="text-primary">Hi <b>{{user.username}}!</b> Validation are completed, click to proceed:</label>
@@ -69,8 +67,20 @@
         </div>
       </div>
     </div>
-    <div class="conversations">
+    <div class="conversations" v-if="parseInt(group.account_id) !== user.userID">
       <div class="message-row">
+        <div class="template">
+          <div class="incre-row text-center">
+            <label class="text-primary">Hi <b>{{user.username}}!</b> Send the requirements below. Just click the button.</label>
+            <span class="incre-row">
+              <button class="btn btn-white text-primary" @click="complyRequirements(item)" v-for="(item, index) in group.validations.requirements" :key="index" v-if="item.validations !== null" style="margin-right: 10px;">{{item.title}}</button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="conversations" v-if="parseInt(group.request.status) === 2">
+      <div class="message-row" v-if="group.rating === null">
         <div class="template">
           <div class="incre-row text-center">
             <label class="text-primary">Hi <b>{{user.username}}!</b> Please help <b>{{group.title.username}}</b> by giving a review.</label>
@@ -80,9 +90,13 @@
           </div>
         </div>
       </div>
+      <div class="incre-row text-center">
+        <label><i style="color: #aaa">Transaction is complete!</i></label>
+      </div>
     </div>
     <add-ratings ref="addRatings"></add-ratings>
     <authenticate-otp ref="authenticateOTP"></authenticate-otp>
+    <browse-images-modal></browse-images-modal>
   </div>
 </template>
 <style scoped lang="scss">
@@ -93,6 +107,12 @@
 .btn-white{
   background: $white;
   border: solid 1px #007bff !important;
+}
+
+.btn-white:hover{
+  cursor: pointer;
+  background: $primary !important;
+  color: $white !important;
 }
 .content-product {
   border: 1px solid $primary;
@@ -218,13 +238,18 @@ export default {
   data(){
     return {
       user: AUTH.user,
-      config: CONFIG
+      config: CONFIG,
+      validation: null,
+      requirements: {
+        url: null
+      }
     }
   },
   components: {
     'product-message': require('components/increment/messengervue/conversationPayhiram/templates/Product.vue'),
     'add-ratings': require('components/increment/generic/rating/Create.vue'),
-    'authenticate-otp': require('modules/transfer/Otp.vue')
+    'authenticate-otp': require('modules/transfer/Otp.vue'),
+    'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue')
   },
   props: ['conversations', 'group'],
   methods: {
@@ -235,11 +260,56 @@ export default {
       let payload = 'profile'
       let payloadValue = this.group.title.id
       if(payloadValue !== null){
-        this.$refs.addRatings.show(payload, payloadValue)
+        this.$refs.addRatings.show(payload, payloadValue, 'request', this.group.payload)
       }
     },
     transfer(){
       this.$refs.authenticateOTP.show()
+    },
+    addValidation(payload){
+      let parameter = {
+        account_id: this.user.userID,
+        payload: payload,
+        request_id: this.group.payload,
+        status: 'pending'
+      }
+      this.APIRequest('request_validations/create', parameter).then(response => {
+        if(response.data > 0){
+          this.$parent.retrieveParent()
+        }
+      })
+    },
+    retrieve(){
+      this.$parent.retrieveParent()
+    },
+    complyRequirements(item){
+      this.validation = item
+      $('#browseImagesModal').modal('show')
+    },
+    manageImageUrl(url){
+      if(this.validation !== null){
+        this.sendMessage(url)
+      }
+    },
+    sendMessage(url){
+      if(url !== null){
+        console.log(this.validation)
+        let parameter = {
+          messenger_group_id: this.group.id,
+          message: this.newMessageInput,
+          account_id: this.user.userID,
+          status: 0,
+          payload: 'image',
+          payload_value: this.validation.validations.id,
+          url: url
+        }
+        this.APIRequest('messenger_messages/create_with_images', parameter).then(response => {
+          if(response.data !== null){
+            this.newMessageInput = null
+            AUTH.messenger.messages.push(response.data)
+          }
+        })
+      }
     }
   }
 }
