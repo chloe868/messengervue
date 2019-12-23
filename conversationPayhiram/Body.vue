@@ -4,6 +4,7 @@
       <div class="message-row" v-for="(item, index) in conversations" :key="index">
         
         <div v-if="parseInt(item.account_id) !== user.userID">
+          <image-message :message="item" :template="''" :group="group" v-if="item.payload === 'image'" @showImage="showImage($event)"></image-message>
           <div class="template" v-if="item.payload === 'text'">
             <div class="header">
               <div class="profile">
@@ -23,6 +24,7 @@
         </div>
 
         <div v-else>
+          <image-message :message="item" :template="'-right'" :group="group" v-if="item.payload === 'image'" @showImage="showImage($event)"></image-message>
           <div class="template" v-if="item.payload === 'text'">
             <div class="header-right">
               <div class="profile">
@@ -97,6 +99,7 @@
     <add-ratings ref="addRatings"></add-ratings>
     <authenticate-otp ref="authenticateOTP"></authenticate-otp>
     <browse-images-modal></browse-images-modal>
+    <show-image-modal ref="showImage"></show-image-modal>
   </div>
 </template>
 <style scoped lang="scss">
@@ -246,10 +249,11 @@ export default {
     }
   },
   components: {
-    'product-message': require('components/increment/messengervue/conversationPayhiram/templates/Product.vue'),
+    'image-message': require('components/increment/messengervue/conversationPayhiram/templates/Image.vue'),
     'add-ratings': require('components/increment/generic/rating/Create.vue'),
     'authenticate-otp': require('modules/transfer/Otp.vue'),
-    'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue')
+    'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue'),
+    'show-image-modal': require('components/increment/generic/modal/Image.vue')
   },
   props: ['conversations', 'group'],
   methods: {
@@ -290,6 +294,9 @@ export default {
       if(this.validation !== null){
         this.sendMessage(url)
       }
+    },
+    showImage(event){
+      this.$refs.showImage.setImage(event.url)
     },
     sendMessage(url){
       if(url !== null){
