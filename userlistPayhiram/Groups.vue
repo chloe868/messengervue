@@ -46,8 +46,8 @@ export default {
   },
   props: ['groups', 'partners'],
   components: {
-    'm-card': require('components/increment/messengervue/userlist/Card.vue'),
-    'm-options': require('components/increment/messengervue/userlist/OtherOptions.vue')
+    'm-card': require('components/increment/messengervue/userlistPayhiram/Card.vue'),
+    'm-options': require('components/increment/messengervue/userlistPayhiram/OtherOptions.vue')
   },
   methods: {
     redirect(parameter){

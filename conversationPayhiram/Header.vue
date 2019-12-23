@@ -2,7 +2,7 @@
   <div class="messenger-header-holder" v-if="group !== null">
     <img :src="config.BACKEND_URL + group.title.profile.url" class="profile" v-if="group.title.profile !== null">
     <i class="fa fa-user-circle-o" v-else></i>
-    <label id="user-name">{{group.title.username}}
+    <label id="user-name">{{group.title.username}} - ****{{group.thread.substring(16, 32)}}
     </label> 
     <!-- <i id="icon-call" class="fa fa-phone bg-primary icons" @click="callHandler(group.title.id)"></i> -->
     <i class="fa fa-chevron-right" @click="setMobileView()"></i>

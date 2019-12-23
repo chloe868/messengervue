@@ -45,8 +45,8 @@
 
       </div>
     </div>
-    <div class="conversations">
-      <div v-if="parseInt(group.account_id) === user.userID" class="message-row">
+    <div class="conversations" v-if="parseInt(group.account_id) === user.userID">
+      <div class="message-row">
         <div class="template">
           <div class="content-right">
             <label class="text-primary">Hi <b>{{user.username}}!</b> Allow validation by clicking the options below.</label>
@@ -54,6 +54,16 @@
               <button class="btn btn-white text-primary">Receiver's ID</button>
               <button class="btn btn-white text-primary">Receiver's signature</button>
               <button class="btn btn-white text-primary">Receiver's photo</button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="message-row">
+        <div class="template">
+          <div class="content-right">
+            <label class="text-primary">Hi <b>{{user.username}}!</b> Validation are completed, click to proceed:</label>
+            <span class="incre-row">
+              <button class="btn btn-white text-primary">Transfer</button>
             </span>
           </div>
         </div>

@@ -80,7 +80,7 @@ export default {
   props: ['params'],
   components: {
     'conversation': require('components/increment/messengervue/conversationPayhiram/Conversation.vue'),
-    'groups': require('components/increment/messengervue/userlist/Groups.vue'),
+    'groups': require('components/increment/messengervue/userlistPayhiram/Groups.vue'),
     'empty-dynamic': require('components/increment/generic/empty/EmptyDynamicIcon.vue')
   },
   watch: {
