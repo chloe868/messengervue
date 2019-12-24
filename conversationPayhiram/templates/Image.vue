@@ -11,13 +11,14 @@
     </div>
     <div :class="'content' + template" v-if="message.validations !== null">
       <label>{{message.validations.payload}}</label>
+      <label :class="{'bg-success': message.validations.status === 'approved', 'bg-danger': message.validations.status === 'pending'}" style="text-transform: UPPERCASE">{{message.validations.status}}</label>
     </div>
     <div :class="'content' + template">
       <img :src="config.BACKEND_URL + item.url" v-for="(item, index) in message.files" :key="index" class="message-image" @click="showImageModal(config.BACKEND_URL + item.url)" />
     </div>
-    <div :class="'content' + template" style="margin-top: 10px;" v-if="group.account_id === user.userID">
-      <button class="btn btn-danger">Decline</button>
-      <button class="btn btn-primary">Approve</button>
+    <div :class="'content' + template" style="margin-top: 10px;" v-if="group.account_id === user.userID && message.validations.status !== 'approved'">
+      <button class="btn btn-danger" @click="update(message.validations, 'declined')">Decline</button>
+      <button class="btn btn-primary" @click="update(message.validations, 'approved')">Approve</button>
     </div>
   </div>
 </template>
@@ -135,7 +136,8 @@
   float: left;
   width: 100%;
   overflow-y: hidden;
-  text-align: justify;
+  text-align: left;
+  margin-bottom: 10px;
 }
 .template .content-right{
   min-height: 10px;
@@ -143,10 +145,9 @@
   width: 100%;
   overflow-y: hidden;
   text-align: right;
+  margin-bottom: 10px;
 }
-.template .content label, .template .content-righ label{
-  line-height: 18px;
-}
+
 
 .message-image{
   width: 24%;
@@ -158,6 +159,38 @@
 .message-image:hover{
   cursor: pointer;
   border: solid 1px $secondary;
+}
+
+.template .content label{
+  line-height: 18px;
+  background: $textBlue;
+  color: $white;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-right: 5px;
+  padding-left: 10px;
+  margin-bottom: 0px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.template .content-right label{
+  line-height: 18px;
+  background: $textBlue;
+  color: $white;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 5px;
+  margin-bottom: 0px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.template .content-right #labelRight{
+  max-width: 60%;
 }
 </style>
 <script>
@@ -179,6 +212,15 @@ export default {
   methods: {
     showImageModal(url){
       this.$emit('showImage', {url: url})
+    },
+    update(item, status){
+      let parameter = {
+        id: item.id,
+        status: status
+      }
+      this.APIRequest('request_validations/update', parameter).then(response => {
+        this.$parent.retrieve()
+      })
     }
   }
 }

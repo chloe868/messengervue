@@ -36,7 +36,7 @@
               </span>
             </div>
             <div class="content-right">
-              <label>
+              <label id="labelRight">
                 <bdi>
                   <label v-html="item.message"></label>
                 </bdi>
@@ -61,7 +61,7 @@
       <div class="message-row" v-if="group.validations.transfer_status === 'approved'">
         <div class="template">
           <div class="incre-row text-center">
-            <label class="text-primary">Hi <b>{{user.username}}!</b> Validation are completed, click to proceed:</label>
+            <label class="text-primary">Hi <b>{{user.username}}!</b> You've compled the validation, click transfer to proceed:</label>
             <span class="incre-row">
               <button class="btn btn-white text-primary" @click="transfer()">Transfer</button>
             </span>
@@ -93,7 +93,7 @@
         </div>
       </div>
       <div class="incre-row text-center">
-        <label><i style="color: #aaa">Transaction is complete!</i></label>
+        <label><i style="color: #aaa">Transaction complete!</i></label>
       </div>
     </div>
     <add-ratings ref="addRatings"></add-ratings>
@@ -109,7 +109,7 @@
 }
 .btn-white{
   background: $white;
-  border: solid 1px #007bff !important;
+  border: solid 1px $textBlue !important;
 }
 
 .btn-white:hover{
@@ -216,7 +216,8 @@
   float: left;
   width: 100%;
   overflow-y: hidden;
-  text-align: justify;
+  text-align: left;
+  max-width: 60%;
 }
 .template .content-right{
   min-height: 10px;
@@ -225,8 +226,36 @@
   overflow-y: hidden;
   text-align: right;
 }
-.template .content label, .template .content-righ label{
+.template .content label{
   line-height: 18px;
+  background: $textBlue;
+  color: $white;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-right: 5px;
+  padding-left: 10px;
+  margin-bottom: 0px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.template .content-right label{
+  line-height: 18px;
+  background: $textBlue;
+  color: $white;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 5px;
+  margin-bottom: 0px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.template .content-right #labelRight{
+  max-width: 60%;
 }
 
 
@@ -314,9 +343,13 @@ export default {
           if(response.data !== null){
             this.newMessageInput = null
             AUTH.messenger.messages.push(response.data)
+            this.$parent.retrieveParent()
           }
         })
       }
+    },
+    successOTP(){
+      console.log('process thread')
     }
   }
 }
