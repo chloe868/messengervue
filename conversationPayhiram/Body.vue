@@ -58,10 +58,10 @@
           </div>
         </div>
       </div>
-      <div class="message-row" v-if="group.validations.transfer_status === 'approved'">
+      <div class="message-row" v-if="group.validations.transfer_status === 'approved' && parseInt(group.request.status) < 2">
         <div class="template">
           <div class="incre-row text-center">
-            <label class="text-primary">Hi <b>{{user.username}}!</b> You've compled the validation, click transfer to proceed:</label>
+            <label class="text-primary">Hi <b>{{user.username}}!</b> You've completed the validation, click transfer to proceed:</label>
             <span class="incre-row">
               <button class="btn btn-white text-primary" @click="transfer()">Transfer</button>
             </span>
@@ -69,7 +69,7 @@
         </div>
       </div>
     </div>
-    <div class="conversations" v-if="parseInt(group.account_id) !== user.userID">
+    <div class="conversations" v-if="parseInt(group.account_id) !== user.userID && parseInt(group.request.status) < 2">
       <div class="message-row">
         <div class="template">
           <div class="incre-row text-center">
@@ -93,7 +93,7 @@
         </div>
       </div>
       <div class="incre-row text-center">
-        <label><i style="color: #aaa">Transaction complete!</i></label>
+        <label><i style="color: #aaa">Transaction completed!</i></label>
       </div>
     </div>
     <add-ratings ref="addRatings"></add-ratings>
@@ -264,6 +264,7 @@
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
+import LEDGER from 'src/services/Ledger.js'
 export default {
   mounted(){
   },
@@ -349,7 +350,13 @@ export default {
       }
     },
     successOTP(){
-      console.log('process thread')
+      LEDGER.processRequest(this.group.thread, this.user.userID, response => {
+        if(response.data !== null && response.data === true){
+          this.$parent.retrieveParent()
+        }else{
+          // error message here
+        }
+      })
     }
   }
 }
