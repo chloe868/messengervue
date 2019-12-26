@@ -2,8 +2,11 @@
   <div class="messenger-header-holder" v-if="group !== null">
     <img :src="config.BACKEND_URL + group.title.profile.url" class="profile" v-if="group.title.profile !== null">
     <i class="fa fa-user-circle-o" v-else></i>
-    <label id="user-name">{{group.title.username}} - ****{{group.thread.substring(16, 32)}}
+    <label id="user-name">{{group.title.username}} - <b class="text-primary action-link" @click="redirect('/requests/' + group.thread)">****{{group.thread.substring(16, 32)}}</b>
     </label> 
+    <label class="pull-right text-primary" style="padding-right: 10px;">
+      <b>{{auth.showRequestType(group.request.type) + ' ' + auth.displayAmountWithCurrency((group.request.amount + group.peer.charge).toFixed(2), group.request.currency)}}</b>
+    </label>
     <!-- <i id="icon-call" class="fa fa-phone bg-primary icons" @click="callHandler(group.title.id)"></i> -->
     <i class="fa fa-chevron-right" @click="setMobileView()"></i>
   </div>
@@ -47,14 +50,15 @@
   margin-top: 5px;
 }
 label{
-  line-height: 8vh;
+  line-height: 50px;
   padding-left: 10px;
   float: left;
   align: center;
+  margin-bottom: 0px;
 }
 i{
   font-size: 30px;
-  line-height: 8vh;
+  line-height: 50px;
   float: left;
   color: $primary;
 }
@@ -81,7 +85,8 @@ export default {
   },
   data(){
     return {
-      config: CONFIG
+      config: CONFIG,
+      auth: AUTH
     }
   },
   props: ['group'],

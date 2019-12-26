@@ -47,57 +47,10 @@
 
       </div>
     </div>
-    <div class="conversations" v-if="parseInt(group.account_id) === user.userID">
-      <div class="message-row" v-if="group.validations.complete_status === false">
-        <div class="template">
-          <div class="incre-row text-center">
-            <label class="text-primary">Hi <b>{{user.username}}!</b> Allow validation by clicking the options below.</label>
-            <span class="incre-row">
-              <button class="btn btn-white text-primary" @click="addValidation(item.payload)" v-for="(item, index) in group.validations.requirements" :key="index" v-if="item.validations === null" style="margin-right: 10px;">{{item.title}}</button>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="message-row" v-if="group.validations.transfer_status === 'approved' && parseInt(group.request.status) < 2">
-        <div class="template">
-          <div class="incre-row text-center">
-            <label class="text-primary">Hi <b>{{user.username}}!</b> You've completed the validation, click transfer to proceed:</label>
-            <span class="incre-row">
-              <button class="btn btn-white text-primary" @click="transfer()">Transfer</button>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="conversations" v-if="parseInt(group.account_id) !== user.userID && parseInt(group.request.status) < 2">
-      <div class="message-row">
-        <div class="template">
-          <div class="incre-row text-center">
-            <label class="text-primary">Hi <b>{{user.username}}!</b> Send the requirements below. Just click the button.</label>
-            <span class="incre-row">
-              <button class="btn btn-white text-primary" @click="complyRequirements(item)" v-for="(item, index) in group.validations.requirements" :key="index" v-if="item.validations !== null" style="margin-right: 10px;">{{item.title}}</button>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="conversations" v-if="parseInt(group.request.status) === 2">
-      <div class="message-row" v-if="group.rating === null">
-        <div class="template">
-          <div class="incre-row text-center">
-            <label class="text-primary">Hi <b>{{user.username}}!</b> Please help <b>{{group.title.username}}</b> by giving a review.</label>
-            <span class="incre-row">
-              <button class="btn btn-white text-primary" @click="review()">Submit review and rating</button>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="incre-row text-center">
-        <label><i style="color: #aaa">Transaction completed!</i></label>
-      </div>
-    </div>
-    <add-ratings ref="addRatings"></add-ratings>
-    <authenticate-otp ref="authenticateOTP"></authenticate-otp>
+    <add-requirements :group="group"></add-requirements>
+    <send-requirements :group="group"></send-requirements>
+    <transfer :group="group"></transfer>
+    <add-reviews :group="group"></add-reviews>
     <browse-images-modal></browse-images-modal>
     <show-image-modal ref="showImage"></show-image-modal>
   </div>
@@ -233,7 +186,7 @@
   padding-top: 7px;
   padding-bottom: 7px;
   padding-right: 5px;
-  padding-left: 10px;
+  padding-left: 5px;
   margin-bottom: 0px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -246,7 +199,7 @@
   color: $white;
   padding-top: 5px;
   padding-bottom: 5px;
-  padding-right: 10px;
+  padding-right: 5px;
   padding-left: 5px;
   margin-bottom: 0px;
   border-top-left-radius: 10px;
@@ -280,83 +233,23 @@ export default {
   },
   components: {
     'image-message': require('components/increment/messengervue/conversationPayhiram/templates/Image.vue'),
-    'add-ratings': require('components/increment/generic/rating/Create.vue'),
-    'authenticate-otp': require('modules/transfer/Otp.vue'),
     'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue'),
-    'show-image-modal': require('components/increment/generic/modal/Image.vue')
+    'show-image-modal': require('components/increment/generic/modal/Image.vue'),
+    'add-requirements': require('components/increment/messengervue/conversationPayhiram/templates/AddRequirements.vue'),
+    'send-requirements': require('components/increment/messengervue/conversationPayhiram/templates/SendRequirements.vue'),
+    'transfer': require('components/increment/messengervue/conversationPayhiram/templates/Transfer.vue'),
+    'add-reviews': require('components/increment/messengervue/conversationPayhiram/templates/Reviews.vue')
   },
   props: ['conversations', 'group'],
   methods: {
     redirect(parameter){
       ROUTER.push(parameter)
     },
-    review(){
-      let payload = 'profile'
-      let payloadValue = this.group.title.id
-      if(payloadValue !== null){
-        this.$refs.addRatings.show(payload, payloadValue, 'request', this.group.payload)
-      }
-    },
-    transfer(){
-      this.$refs.authenticateOTP.show()
-    },
-    addValidation(payload){
-      let parameter = {
-        account_id: this.user.userID,
-        payload: payload,
-        request_id: this.group.payload,
-        status: 'pending'
-      }
-      this.APIRequest('request_validations/create', parameter).then(response => {
-        if(response.data > 0){
-          this.$parent.retrieveParent()
-        }
-      })
-    },
     retrieve(){
       this.$parent.retrieveParent()
     },
-    complyRequirements(item){
-      this.validation = item
-      $('#browseImagesModal').modal('show')
-    },
-    manageImageUrl(url){
-      if(this.validation !== null){
-        this.sendMessage(url)
-      }
-    },
     showImage(event){
       this.$refs.showImage.setImage(event.url)
-    },
-    sendMessage(url){
-      if(url !== null){
-        console.log(this.validation)
-        let parameter = {
-          messenger_group_id: this.group.id,
-          message: this.newMessageInput,
-          account_id: this.user.userID,
-          status: 0,
-          payload: 'image',
-          payload_value: this.validation.validations.id,
-          url: url
-        }
-        this.APIRequest('messenger_messages/create_with_images', parameter).then(response => {
-          if(response.data !== null){
-            this.newMessageInput = null
-            AUTH.messenger.messages.push(response.data)
-            this.$parent.retrieveParent()
-          }
-        })
-      }
-    },
-    successOTP(){
-      LEDGER.processRequest(this.group.thread, this.user.userID, response => {
-        if(response.data !== null && response.data === true){
-          this.$parent.retrieveParent()
-        }else{
-          // error message here
-        }
-      })
     }
   }
 }
