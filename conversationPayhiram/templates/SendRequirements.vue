@@ -50,41 +50,14 @@ export default {
   data(){
     return {
       user: AUTH.user,
-      config: CONFIG,
-      validation: null
+      config: CONFIG
     }
   },
   props: ['group'],
   methods: {
     complyRequirements(item){
-      this.validation = item
+      this.$parent.validation = item
       $('#browseImagesModal').modal('show')
-    },
-    manageImageUrl(url){
-      if(this.validation !== null){
-        this.sendMessage(url)
-      }
-    },
-    sendMessage(url){
-      if(url !== null){
-        console.log(this.validation)
-        let parameter = {
-          messenger_group_id: this.group.id,
-          message: this.newMessageInput,
-          account_id: this.user.userID,
-          status: 0,
-          payload: 'image',
-          payload_value: this.validation.validations.id,
-          url: url
-        }
-        this.APIRequest('messenger_messages/create_with_images', parameter).then(response => {
-          if(response.data !== null){
-            this.newMessageInput = null
-            AUTH.messenger.messages.push(response.data)
-            this.$parent.retrieve()
-          }
-        })
-      }
     }
   }
 }
