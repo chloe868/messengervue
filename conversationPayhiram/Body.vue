@@ -261,7 +261,7 @@ export default {
         console.log(this.validation)
         let parameter = {
           messenger_group_id: this.group.id,
-          message: this.newMessageInput,
+          message: null,
           account_id: this.user.userID,
           status: 0,
           payload: 'image',

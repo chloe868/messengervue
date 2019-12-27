@@ -216,10 +216,14 @@ export default {
     update(item, status){
       let parameter = {
         id: item.id,
-        status: status
+        status: status,
+        messages: {
+          messenger_group_id: this.group.id,
+          account_id: this.user.userID
+        }
       }
       this.APIRequest('request_validations/update', parameter).then(response => {
-        this.$parent.retrieve()
+        ROUTER.go('/')
       })
     }
   }

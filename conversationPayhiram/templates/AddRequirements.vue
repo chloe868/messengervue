@@ -60,7 +60,11 @@ export default {
         account_id: this.user.userID,
         payload: payload,
         request_id: this.group.payload,
-        status: 'pending'
+        status: 'pending',
+        messages: {
+          messenger_group_id: this.group.id,
+          account_id: this.user.userID
+        }
       }
       this.APIRequest('request_validations/create', parameter).then(response => {
         if(response.data > 0){

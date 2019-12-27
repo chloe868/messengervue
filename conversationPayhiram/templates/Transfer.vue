@@ -74,7 +74,7 @@ export default {
     },
     successOTP(){
       console.log('hi')
-      LEDGER.processRequest(this.group.thread, this.user.userID, response => {
+      LEDGER.processRequest(this.group, this.user.userID, response => {
         if(response.data !== null && response.data === true){
           this.$parent.retrieve()
         }else{
