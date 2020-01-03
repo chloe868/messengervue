@@ -1,9 +1,19 @@
 <template>
   <div class="conversations">
-    <div class="message-row" v-if="parseInt(group.account_id) === user.userID && group.validations.transfer_status === 'approved' && parseInt(group.request.status) < 2 && parseInt(group.request.type) < 3">
+    <div class="message-row" v-if="parseInt(group.account_id) === user.userID && group.validations.transfer_status === 'approved' && parseInt(group.request.status) < 2 && parseInt(group.request.type) === 1">
       <div class="template">
         <div class="incre-row text-center">
           <label class="text-primary">Hi <b>{{user.username}}!</b> You've completed the validation, click transfer to proceed:</label>
+          <span class="incre-row">
+            <button class="btn btn-white text-primary" @click="transfer()">Transfer</button>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="message-row" v-if="parseInt(group.account_id) === user.userID && parseInt(group.request.status) < 2 && parseInt(group.request.type) === 2">
+      <div class="template">
+        <div class="incre-row text-center">
+          <label class="text-primary">Hi <b>{{user.username}}!</b> If you receive the money from other peer already, then you can continue to transfer and complete the thread.</label>
           <span class="incre-row">
             <button class="btn btn-white text-primary" @click="transfer()">Transfer</button>
           </span>

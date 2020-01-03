@@ -16,7 +16,7 @@
     <div :class="'content' + template">
       <img :src="config.BACKEND_URL + item.url" v-for="(item, index) in message.files" :key="index" class="message-image" @click="showImageModal(config.BACKEND_URL + item.url)" />
     </div>
-    <div :class="'content' + template" style="margin-top: 10px;" v-if="group.account_id === user.userID && message.validations.status !== 'approved'">
+    <div :class="'content' + template" style="margin-top: 10px;" v-if="group.account_id === user.userID && message.validations !== null && message.validations.status !== 'approved'">
       <button class="btn btn-danger" @click="update(message.validations, 'declined')">Decline</button>
       <button class="btn btn-primary" @click="update(message.validations, 'approved')">Approve</button>
     </div>
