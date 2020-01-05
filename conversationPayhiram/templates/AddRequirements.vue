@@ -1,11 +1,11 @@
 <template>
-  <div class="conversations" v-if="parseInt(group.account_id) === user.userID && parseInt(group.request.type) === 1">
-    <div class="message-row" v-if="group.validations.complete_status === false">
+  <div class="conversations" v-if="parseInt(auth.messenger.group.account_id) === user.userID && parseInt(auth.messenger.group.request.type) === 1">
+    <div class="message-row" v-if="auth.messenger.group.validations.complete_status === false">
       <div class="template">
         <div class="incre-row text-center">
           <label class="text-primary">Hi <b>{{user.username}}!</b> Allow validation by clicking the options below.</label>
           <span class="incre-row">
-            <button class="btn btn-white text-primary" @click="addValidation(item.payload)" v-for="(item, index) in group.validations.requirements" :key="index" v-if="item.validations === null" style="margin-right: 10px;">{{item.title}}</button>
+            <button class="btn btn-white text-primary" @click="addValidation(item.payload)" v-for="(item, index) in auth.messenger.group.validations.requirements" :key="index" v-if="item.validations === null" style="margin-right: 10px;">{{item.title}}</button>
           </span>
         </div>
       </div>
@@ -50,7 +50,8 @@ export default {
   data(){
     return {
       user: AUTH.user,
-      config: CONFIG
+      config: CONFIG,
+      auth: AUTH
     }
   },
   props: ['group'],
@@ -59,10 +60,10 @@ export default {
       let parameter = {
         account_id: this.user.userID,
         payload: payload,
-        request_id: this.group.payload,
+        request_id: AUTH.messenger.group.payload,
         status: 'pending',
         messages: {
-          messenger_group_id: this.group.id,
+          messenger_group_id: AUTH.messenger.group.id,
           account_id: this.user.userID
         }
       }

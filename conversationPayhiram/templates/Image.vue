@@ -16,7 +16,7 @@
     <div :class="'content' + template">
       <img :src="config.BACKEND_URL + item.url" v-for="(item, index) in message.files" :key="index" class="message-image" @click="showImageModal(config.BACKEND_URL + item.url)" />
     </div>
-    <div :class="'content' + template" style="margin-top: 10px;" v-if="group.account_id === user.userID && message.validations !== null && message.validations.status !== 'approved'">
+    <div :class="'content' + template" style="margin-top: 10px;" v-if="auth.messenger.group.account_id === user.userID && message.validations !== null && message.validations.status !== 'approved'">
       <button class="btn btn-danger" @click="update(message.validations, 'declined')">Decline</button>
       <button class="btn btn-primary" @click="update(message.validations, 'approved')">Approve</button>
     </div>
@@ -203,7 +203,8 @@ export default {
   data(){
     return {
       user: AUTH.user,
-      config: CONFIG
+      config: CONFIG,
+      auth: AUTH
     }
   },
   components: {
@@ -218,12 +219,11 @@ export default {
         id: item.id,
         status: status,
         messages: {
-          messenger_group_id: this.group.id,
+          messenger_group_id: AUTH.messenger.group.id,
           account_id: this.user.userID
         }
       }
       this.APIRequest('request_validations/update', parameter).then(response => {
-        ROUTER.go('/')
       })
     }
   }

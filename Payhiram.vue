@@ -160,6 +160,8 @@ export default {
         this.groups[index].flag = true
       }
       this.prevModuleSelected = moduleText
+      AUTH.messenger.group = this.groups[this.selectedIndex]
+      console.log('payhiram group', AUTH.messenger.group)
       this.selectedGroup(index, moduleText)
     },
     updateMobileViewFlag(flag){

@@ -1,10 +1,10 @@
 <template>
   <div class="holder" id="groupConversation">
-    <c-header :group="group" v-if="group !== null"></c-header>
+    <c-header :group="auth.messenger.group" v-if="auth.messenger.group !== null"></c-header>
     <div class="conversation-messages-holder">
-      <c-body :conversations="auth.messenger.messages" :group="group" v-if="group !== null"></c-body>
+      <c-body :conversations="auth.messenger.messages" :group="auth.messenger.group" v-if="auth.messenger.group !== null"></c-body>
     </div>
-    <c-footer :group="group" v-if="group !== null && parseInt(group.request.status) < 2" @changeGroupEvent="changedGroupHandler($event)"></c-footer>
+    <c-footer :group="auth.messenger.group" v-if="auth.messenger.group !== null && parseInt(auth.messenger.group.request.status) < 2" @changeGroupEvent="changedGroupHandler($event)"></c-footer>
   </div>
 </template>
 <style scoped lang="scss">

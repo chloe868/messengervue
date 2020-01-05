@@ -87,9 +87,9 @@ export default {
       }
     },
     sendMessage(){
-      if((this.newMessageInput !== '' || this.newMessageInput !== null) && this.group.new === false){
+      if((this.newMessageInput !== '' || this.newMessageInput !== null) && AUTH.messenger.group.new === false){
         let parameter = {
-          messenger_group_id: this.group.id,
+          messenger_group_id: AUTH.messenger.group.id,
           message: this.newMessageInput,
           account_id: this.user.userID,
           status: 0,

@@ -1,9 +1,9 @@
 <template>
-  <div class="conversations" v-if="parseInt(group.request.status) === 2">
-    <div class="message-row" v-if="group.rating === null">
+  <div class="conversations" v-if="parseInt(auth.messenger.group.request.status) === 2">
+    <div class="message-row" v-if="auth.messenger.group.rating === null">
       <div class="template">
         <div class="incre-row text-center">
-          <label class="text-primary">Hi <b>{{user.username}}!</b> Please help <b>{{group.title.username}}</b> by giving a review.</label>
+          <label class="text-primary">Hi <b>{{user.username}}!</b> Please help <b>{{auth.messenger.group.title.username}}</b> by giving a review.</label>
           <span class="incre-row">
             <button class="btn btn-white text-primary" @click="review()">Submit review and rating</button>
           </span>
@@ -54,7 +54,8 @@ export default {
   data(){
     return {
       user: AUTH.user,
-      config: CONFIG
+      config: CONFIG,
+      auth: AUTH
     }
   },
   props: ['group'],
@@ -64,9 +65,9 @@ export default {
   methods: {
     review(){
       let payload = 'profile'
-      let payloadValue = this.group.title.id
+      let payloadValue = AUTH.messenger.group.title.id
       if(payloadValue !== null){
-        this.$refs.addRatings.show(payload, payloadValue, 'request', this.group.payload)
+        this.$refs.addRatings.show(payload, payloadValue, 'request', AUTH.messenger.group.payload)
       }
     },
     retrieve(){

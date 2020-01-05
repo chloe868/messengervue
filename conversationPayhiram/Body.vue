@@ -4,7 +4,7 @@
       <div class="message-row" v-for="(item, index) in conversations" :key="index">
         
         <div v-if="parseInt(item.account_id) !== user.userID">
-          <image-message :message="item" :template="''" :group="group" v-if="item.payload === 'image'" @showImage="showImage($event)"></image-message>
+          <image-message :message="item" :template="''" :group="auth.messenger.group" v-if="item.payload === 'image'" @showImage="showImage($event)"></image-message>
           <div class="template" v-if="item.payload === 'text'">
             <div class="header">
               <div class="profile">
@@ -24,7 +24,7 @@
         </div>
 
         <div v-else>
-          <image-message :message="item" :template="'-right'" :group="group" v-if="item.payload === 'image'" @showImage="showImage($event)"></image-message>
+          <image-message :message="item" :template="'-right'" :group="auth.messenger.group" v-if="item.payload === 'image'" @showImage="showImage($event)"></image-message>
           <div class="template" v-if="item.payload === 'text'">
             <div class="header-right">
               <div class="profile">
@@ -47,10 +47,10 @@
 
       </div>
     </div>
-    <add-requirements :group="group"></add-requirements>
-    <send-requirements :group="group"></send-requirements>
-    <transfer :group="group"></transfer>
-    <add-reviews :group="group"></add-reviews>
+    <add-requirements :group="auth.messenger.group"></add-requirements>
+    <send-requirements :group="auth.messenger.group"></send-requirements>
+    <transfer :group="auth.messenger.group"></transfer>
+    <add-reviews :group="auth.messenger.group"></add-reviews>
     <browse-images-modal></browse-images-modal>
     <show-image-modal ref="showImage"></show-image-modal>
   </div>
@@ -225,6 +225,7 @@ export default {
     return {
       user: AUTH.user,
       config: CONFIG,
+      auth: AUTH,
       validation: null,
       requirements: {
         url: null
@@ -260,7 +261,7 @@ export default {
       if(url !== null){
         console.log(this.validation)
         let parameter = {
-          messenger_group_id: this.group.id,
+          messenger_group_id: AUTH.messenger.group.id,
           message: null,
           account_id: this.user.userID,
           status: 0,

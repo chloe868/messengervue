@@ -1,6 +1,6 @@
 <template>
   <div class="conversations">
-    <div class="message-row" v-if="parseInt(group.account_id) === user.userID && group.validations.transfer_status === 'approved' && parseInt(group.request.status) < 2 && parseInt(group.request.type) === 1">
+    <div class="message-row" v-if="parseInt(auth.messenger.group.account_id) === user.userID && auth.messenger.group.validations.transfer_status === 'approved' && parseInt(auth.messenger.group.request.status) < 2 && parseInt(auth.messenger.group.request.type) === 1">
       <div class="template">
         <div class="incre-row text-center">
           <label class="text-primary">Hi <b>{{user.username}}!</b> You've completed the validation, click transfer to proceed:</label>
@@ -10,7 +10,7 @@
         </div>
       </div>
     </div>
-    <div class="message-row" v-if="parseInt(group.account_id) === user.userID && parseInt(group.request.status) < 2 && parseInt(group.request.type) === 2">
+    <div class="message-row" v-if="parseInt(auth.messenger.group.account_id) === user.userID && parseInt(auth.messenger.group.request.status) < 2 && parseInt(auth.messenger.group.request.type) === 2">
       <div class="template">
         <div class="incre-row text-center">
           <label class="text-primary">Hi <b>{{user.username}}!</b> If you receive the money from other peer already, then you can continue to transfer and complete the thread.</label>
@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="message-row" v-if="parseInt(group.account_id) !== user.userID && parseInt(group.request.type) === 3 && parseInt(group.request.status) < 2">
+    <div class="message-row" v-if="parseInt(auth.messenger.group.account_id) !== user.userID && parseInt(auth.messenger.group.request.type) === 3 && parseInt(auth.messenger.group.request.status) < 2">
       <div class="template">
         <div class="incre-row text-center">
           <label class="text-primary">Hi <b>{{user.username}}!</b> If you receive the money from other peer already, then you can continue to transfer and complete the thread.</label>
@@ -71,7 +71,8 @@ export default {
   data(){
     return {
       user: AUTH.user,
-      config: CONFIG
+      config: CONFIG,
+      auth: AUTH
     }
   },
   props: ['group'],
@@ -84,7 +85,7 @@ export default {
     },
     successOTP(){
       console.log('hi')
-      LEDGER.processRequest(this.group, this.user.userID, response => {
+      LEDGER.processRequest(AUTH.messenger.group, this.user.userID, response => {
         if(response.data !== null && response.data === true){
           this.$parent.retrieve()
         }else{
