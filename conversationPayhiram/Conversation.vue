@@ -70,10 +70,10 @@ export default {
       ROUTER.push(parameter)
     },
     retrieve(){
-      if(this.groupId && this.group.new === false){
+      if(AUTH.messenger.messengerGroupId){
         let parameter = {
           condition: [{
-            value: this.groupId,
+            value: AUTH.messenger.messengerGroupId,
             column: 'messenger_group_id',
             clause: '='
           }],

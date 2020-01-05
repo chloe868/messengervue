@@ -1,10 +1,9 @@
 <template>
-  <div class="holder" v-bind:class="{'active-card': group.flag === true}" @click="selected(index, moduleText)" v-if="group !== null  && group.title !== null">
+  <div class="holder" v-bind:class="{'active-card': auth.messenger.group !== null && parseInt(auth.messenger.group.id) === parseInt(group.id)}" @click="selected(index, moduleText)" v-if="group !== null  &&group.title !== null">
     <img :src="config.BACKEND_URL + group.title.profile.url" class="profile" v-if="group.title.profile !== null">
     <i class="fa fa-user-circle-o" v-else></i>
     <label>
       ****{{group.thread.substring(16, 32)}}
-      
     </label>
     
   </div>
@@ -18,9 +17,11 @@
   padding-left: 5px;
   border-bottom: solid 1px #eee;
 }
+
 .active-card{
   background: #eee;
 }
+
 .profile{
   width: 40px;
   height: 40px;
@@ -29,11 +30,16 @@
   float: left;
 
 }
+
 label{
   line-height: 50px;
   padding-left: 10px;
   float: left;
   text-align: center;
+}
+
+label:hover{
+  cursor: pointer;
 }
 
 i{
@@ -56,7 +62,8 @@ import CONFIG from 'src/config.js'
 export default {
   data(){
     return {
-      config: CONFIG
+      config: CONFIG,
+      auth: AUTH
     }
   },
   props: ['group', 'index', 'moduleText'],

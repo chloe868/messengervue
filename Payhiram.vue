@@ -2,7 +2,7 @@
   <div>
     <div class="messenger-holder" v-if="groups !== null || partners !== null">
       <div class="conversation" v-bind:class="{'active-conversation': mobileViewFlag === false}">
-        <conversation :groupId.sync="groupId" :group="selectedGroupData" @changeGroupEvent="changeGroupHandler($event)"></conversation>   
+        <conversation :groupId.sync="auth.messenger.messengerGroupId" :group="auth.messenger.group"></conversation>   
       </div>
       <div class="users" v-bind:class="{'active-users': mobileViewFlag === true}">
         <groups :groups="groups" :partners="partners" v-if="groups !== null || partners !== null"></groups>
@@ -60,21 +60,18 @@ import axios from 'axios'
 export default {
   mounted(){
     AUTH.checkPlan()
-    this.retrieve(null)
+    this.retrieve(true)
   },
   data(){
     return {
       user: AUTH.user,
       config: CONFIG,
       newTitle: null,
-      data: null,
       groups: null,
       partners: null,
       selectedIndex: 0,
-      selectedGroupData: null,
-      prevModuleSelected: null,
-      groupId: null,
-      mobileViewFlag: false
+      mobileViewFlag: false,
+      auth: AUTH
     }
   },
   props: ['params'],
@@ -88,12 +85,10 @@ export default {
       if(this.$route.params.username){
         let indexGroup = this.checkIfExistUsername(this.$route.params.username, this.groups)
         if(indexGroup !== null){
-          this.prevModuleSelected = 'groups'
           this.makeActiveCard(indexGroup, 'groups')
         }else{
           let indexPartner = this.checkIfExistUsername(this.$route.params.username, this.partners)
           if(indexPartner !== null){
-            this.prevModuleSelected = 'partners'
             this.makeActiveCard(indexPartner, 'partners')
           }
         }
@@ -115,7 +110,7 @@ export default {
         })
       }
     },
-    retrieve(active){
+    retrieve(flag){
       let parameter = {
         account_id: this.user.userID,
         code: this.$route.params.code
@@ -123,10 +118,21 @@ export default {
       this.APIRequest('custom_messenger_groups/retrieve', parameter).done(response => {
         this.groups = response.data
         this.partners = response.accounts
-        this.prevModuleSelected = 'groups'
-        setTimeout(() => {
-          this.makeActiveCard(active === null ? response.active : this.selectedIndex, 'groups')
-        }, 100)
+        if(flag === true){
+          let active = 0
+          if(AUTH.messenger.group !== null){
+            for (var i = 0; i < response.data.length; i++) {
+              let item = response.data[i]
+              if(item.id === parseInt(AUTH.messenger.group.id)){
+                active = i
+                break
+              }
+            }
+          }
+          setTimeout(() => {
+            this.makeActive(active, 'groups')
+          }, 100)
+        }
       })
     },
     checkIfExistUsername(username, list){
@@ -139,37 +145,18 @@ export default {
       }
       return null
     },
-    selectedGroup(index, moduleText){
-      this.selectedIndex = index
-      var i = 0
-      if(moduleText === 'groups'){
-        this.groupId = this.groups[index].id
-        this.selectedGroupData = this.groups[index]
-        AUTH.messenger.messengerGroupId = parseInt(this.groups[index].id)
-        for (i = 0; i < this.$children.length; i++) {
-          if(this.$children[i].$el.id === 'groupConversation'){
-            this.$children[i].newFlag = false
-            this.$children[i].conversations = null
-          }
-        }
-      }
-    },
     makeActiveCard(index, moduleText){
-      if(this.selectedIndex !== index){
-        this.groups[this.selectedIndex].flag = false
-        this.groups[index].flag = true
-      }
-      this.prevModuleSelected = moduleText
-      AUTH.messenger.group = this.groups[this.selectedIndex]
-      console.log('payhiram group', AUTH.messenger.group)
-      this.selectedGroup(index, moduleText)
+      AUTH.messenger.group = this.groups[index]
+      AUTH.messenger.messengerGroupId = this.groups[index].id
+      console.log('hi')
+      this.retrieve(false)
+    },
+    makeActive(index, moduleText){
+      AUTH.messenger.group = this.groups[index]
+      AUTH.messenger.messengerGroupId = this.groups[index].id
     },
     updateMobileViewFlag(flag){
       this.mobileViewFlag = flag
-    },
-    changeGroupHandler(data){
-      this.selectedGroupData = data
-      this.retrieve(this.user.username)
     }
   }
 }

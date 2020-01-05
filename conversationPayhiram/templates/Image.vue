@@ -224,6 +224,7 @@ export default {
         }
       }
       this.APIRequest('request_validations/update', parameter).then(response => {
+        this.$parent.retrieve()
       })
     }
   }

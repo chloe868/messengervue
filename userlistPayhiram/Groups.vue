@@ -3,7 +3,6 @@
     <div class="header text-primary">
       <b>Threads</b>
     </div>
-    <m-card v-for="(partner, index) in partners" :key="'B' + partner.id" :group="partner" :index="index" :moduleText="'partners'"></m-card>
     <m-card v-for="(group, index) in groups" :key="'A' + group.id" :group="group" :index="index" :moduleText="'groups'"></m-card>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="conversations" v-if="parseInt(auth.messenger.group.account_id) !== user.userID && parseInt(auth.messenger.group.request.status) < 2 && parseInt(auth.messenger.group.request.type) === 1 && auth.messenger.group.validations.complete_status === false">
+  <div class="conversations" v-if="parseInt(auth.messenger.group.account_id) !== user.userID && parseInt(auth.messenger.group.request.status) < 2 && parseInt(auth.messenger.group.request.type) === 1 && auth.messenger.group.validations.transfer_status !== 'approved'">
     <div class="message-row">
       <div class="template">
         <div class="incre-row text-center">
