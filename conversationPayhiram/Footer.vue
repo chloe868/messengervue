@@ -94,12 +94,32 @@ export default {
           account_id: this.user.userID,
           status: 0,
           payload: 'text',
-          payload_value: null
+          payload_value: null,
+          code: AUTH.messenger.messages.length + 1
         }
+        let newMessageTemp = {
+          ...parameter,
+          account: this.user,
+          created_at_human: null,
+          sending_flag: true,
+          error: null
+        }
+        AUTH.messenger.messages.push(newMessageTemp)
+        this.newMessageInput = null
         this.APIRequest('messenger_messages/create', parameter).then(response => {
           if(response.data !== null){
             this.newMessageInput = null
-            AUTH.messenger.messages.push(response.data)
+            // update previous message
+            for (var i = AUTH.messenger.messages.length - 1; i > 0; i--) {
+              let item = AUTH.messenger.messages[i]
+              if(typeof item.code === 'undefined' || item.code === undefined){
+                break
+              }
+              if(parseInt(item.code) === parseInt(response.data.code)){
+                AUTH.messenger.messages[i] = response.data
+                break
+              }
+            }
           }
         })
       }

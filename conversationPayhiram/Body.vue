@@ -1,7 +1,7 @@
 <template>
   <div id="messenger">
-    <div class="messenger-holder" v-if="conversations !== null">
-      <div class="message-row" v-for="(item, index) in conversations" :key="index">
+    <div class="messenger-holder" v-if="auth.messenger.messages !== null">
+      <div class="message-row" v-for="(item, index) in auth.messenger.messages" :key="index">
         
         <div v-if="parseInt(item.account_id) !== user.userID">
           <image-message :message="item" :template="''" :group="auth.messenger.group" v-if="item.payload === 'image'" @showImage="showImage($event)"></image-message>
@@ -14,6 +14,9 @@
               <span class="details" v-if="item.account !== null">
                 <label><b>{{item.account.username}}</b></label>
               </span>
+            </div>
+            <div class="content" style="margin-top:-10px;">
+              <i style="font-size: 11px;color: #555;">{{item.created_at_human}}</i>
             </div>
             <div class="content">
               <label>
@@ -35,12 +38,18 @@
                 <label><b>{{item.account.username}}</b></label>
               </span>
             </div>
+            <div class="content-right" style="margin-top:-10px;">
+                <i style="font-size: 11px;color: #555;">{{item.created_at_human}}</i>
+            </div>
             <div class="content-right">
               <label id="labelRight">
                 <bdi>
                   <label v-html="item.message"></label>
                 </bdi>
               </label>
+<!--               <span style="width: 100%" v-if="auth.messenger.messages[index].sending_flag === true">
+                <i class="text-gray">Sending ...</i>
+              </span> -->
             </div>
           </div>
         </div>
