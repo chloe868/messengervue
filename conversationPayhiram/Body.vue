@@ -276,13 +276,14 @@ export default {
           status: 0,
           payload: 'image',
           payload_value: this.validation.validations.id,
-          url: url
+          url: url,
+          code: AUTH.messenger.messages.length + 1
         }
         this.APIRequest('messenger_messages/create_with_images', parameter).then(response => {
           if(response.data !== null){
             this.newMessageInput = null
             AUTH.messenger.messages.push(response.data)
-            this.$parent.retrieveParent()
+            this.$parent.retrieve()
           }
         })
       }

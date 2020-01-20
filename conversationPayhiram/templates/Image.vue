@@ -9,14 +9,14 @@
         <label><b>{{message.account.username}}</b></label>
       </span>
     </div>
-    <div :class="'content' + template" v-if="message.validations !== null">
+    <div :class="'content' + template" v-if="message.validations !== null && message.payload_value !== null">
       <label>{{message.validations.payload}}</label>
       <label :class="{'bg-success': message.validations.status === 'approved', 'bg-danger': message.validations.status === 'pending'}" style="text-transform: UPPERCASE">{{message.validations.status}}</label>
     </div>
     <div :class="'content' + template">
       <img :src="config.BACKEND_URL + item.url" v-for="(item, index) in message.files" :key="index" class="message-image" @click="showImageModal(config.BACKEND_URL + item.url)" />
     </div>
-    <div :class="'content' + template" style="margin-top: 10px;" v-if="auth.messenger.group.account_id === user.userID && message.validations !== null && message.validations.status !== 'approved'">
+    <div :class="'content' + template" style="margin-top: 10px;" v-if="auth.messenger.group.account_id === user.userID && message.validations !== null && message.payload_value !== null && message.validations.status !== 'approved'">
       <button class="btn btn-danger" @click="update(message.validations, 'declined')">Decline</button>
       <button class="btn btn-primary" @click="update(message.validations, 'approved')">Approve</button>
     </div>
