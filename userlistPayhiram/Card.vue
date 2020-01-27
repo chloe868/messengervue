@@ -5,7 +5,9 @@
     <label>
       ****{{group.thread.substring(16, 32)}}
     </label>
-    
+    <strong class="badge badge-danger pull-right" v-if="parseInt(group.total_unread_messages) > 0">
+      {{group.total_unread_messages}}
+    </strong>
   </div>
 </template>
 <style scoped lang="scss">
@@ -52,6 +54,12 @@ i{
 .holder:hover{
   cursor: pointer;
   background: $hover;
+}
+
+strong{
+  margin-top: 18px;
+  margin-left: 10px;
+  margin-right: 20px;
 }
 
 </style>

@@ -113,7 +113,7 @@ export default {
     retrieve(flag){
       let parameter = {
         account_id: this.user.userID,
-        code: this.$route.params.code
+        code: this.$route.params.code ? this.$route.params.code : null
       }
       this.APIRequest('custom_messenger_groups/retrieve', parameter).done(response => {
         this.groups = response.data
@@ -149,14 +149,26 @@ export default {
       AUTH.messenger.group = this.groups[index]
       AUTH.messenger.messengerGroupId = this.groups[index].id
       console.log('hi')
+      this.updateMessages(this.groups[index])
       this.retrieve(false)
     },
     makeActive(index, moduleText){
       AUTH.messenger.group = this.groups[index]
       AUTH.messenger.messengerGroupId = this.groups[index].id
+      this.updateMessages(this.groups[index])
     },
     updateMobileViewFlag(flag){
       this.mobileViewFlag = flag
+    },
+    updateMessages(item){
+      if(item.total_unread_messages > 0){
+        let parameter = {
+          messenger_group_id: item.id
+        }
+        this.APIRequest('messenger_messages/update_by_status', parameter).then(response => {
+        })
+        item.total_unread_messages = 0
+      }
     }
   }
 }
