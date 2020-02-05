@@ -74,6 +74,10 @@ i{
   #icon-call {
     margin-right: 10px;
   }
+
+  label{
+    line-height: 16px;
+  }
 }
 </style>
 <script>
