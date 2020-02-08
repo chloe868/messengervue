@@ -1,5 +1,5 @@
 <template>
-  <div class="conversations" v-if="parseInt(auth.messenger.group.account_id) !== user.userID && parseInt(auth.messenger.group.request.status) < 2 && parseInt(auth.messenger.group.request.type) === 1 && auth.messenger.group.validations.transfer_status !== 'approved' && parseInt(auth.messenger.group.validations.validation_status) > 0">
+  <div class="conversations" v-if="parseInt(auth.messenger.group.account_id) !== user.userID && parseInt(auth.messenger.group.request.status) < 2 && jquery.inArray(parseInt(auth.messenger.group.request.type), common.fulfillmentTypesWithValidation) && auth.messenger.group.validations.transfer_status !== 'approved' && parseInt(auth.messenger.group.validations.validation_status) > 0">
     <div class="message-row">
       <div class="template">
         <div class="incre-row text-center">
@@ -44,6 +44,7 @@ import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import LEDGER from 'src/services/Ledger.js'
+import COMMON from 'src/common.js'
 export default {
   mounted(){
   },
@@ -51,7 +52,9 @@ export default {
     return {
       user: AUTH.user,
       config: CONFIG,
-      auth: AUTH
+      auth: AUTH,
+      common: COMMON,
+      jquery: $
     }
   },
   props: ['group'],

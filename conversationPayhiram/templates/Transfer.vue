@@ -1,6 +1,6 @@
 <template>
   <div class="conversations">
-    <div class="message-row" v-if="parseInt(auth.messenger.group.account_id) === user.userID && auth.messenger.group.validations.transfer_status === 'approved' && parseInt(auth.messenger.group.request.status) < 2 && parseInt(auth.messenger.group.request.type) === 1">
+    <div class="message-row" v-if="parseInt(auth.messenger.group.account_id) === user.userID && auth.messenger.group.validations.transfer_status === 'approved' && parseInt(auth.messenger.group.request.status) < 2 && jquery.inArray(parseInt(auth.messenger.group.request.type), common.fulfillmentTypesWithValidation)">
       <div class="template">
         <div class="incre-row text-center">
           <label class="text-primary">Hi <b>{{user.username}}!</b> You've completed the validation, click transfer to proceed:</label>
@@ -65,6 +65,7 @@ import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import LEDGER from 'src/services/Ledger.js'
+import COMMON from 'src/common.js'
 export default {
   mounted(){
   },
@@ -72,7 +73,9 @@ export default {
     return {
       user: AUTH.user,
       config: CONFIG,
-      auth: AUTH
+      auth: AUTH,
+      common: COMMON,
+      jquery: $
     }
   },
   props: ['group'],
