@@ -30,7 +30,8 @@
         </div>
       </div>
     </div>
-    <authenticate-otp ref="authenticateOTP"></authenticate-otp>
+    <authenticate-otp ref="authenticateOTP" v-if="common.authorize === 'OTP'"></authenticate-otp>
+    <authenticate-pin ref="authenticateOTP" v-if="common.authorize === 'PIN'"></authenticate-pin>
   </div>
 </template>
 <style scoped lang="scss">
@@ -80,7 +81,8 @@ export default {
   },
   props: ['group'],
   components: {
-    'authenticate-otp': require('modules/transfer/Otp.vue')
+    'authenticate-otp': require('modules/transfer/Otp.vue'),
+    'authenticate-pin': require('modules/transfer/Pin.vue')
   },
   methods: {
     transfer(){
