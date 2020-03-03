@@ -1,6 +1,6 @@
 <template>
   <div class="conversations">
-    <div class="message-row" v-if="parseInt(auth.messenger.group.account_id) === user.userID && auth.messenger.group.validations.transfer_status === 'approved' && parseInt(auth.messenger.group.request.status) < 2 && jquery.inArray(parseInt(auth.messenger.group.request.type), common.fulfillmentTypesWithValidation)">
+    <div class="message-row" v-if="parseInt(auth.messenger.group.account_id) === user.userID && auth.messenger.group.validations.transfer_status === 'approved' && parseInt(auth.messenger.group.request.status) < 2 && jquery.inArray(parseInt(auth.messenger.group.request.type), common.fulfillmentTypesWithValidation) > -1">
       <div class="template">
         <div class="incre-row text-center">
           <label class="text-primary">Hi <b>{{user.username}}!</b> You've completed the validation, click transfer to proceed:</label>

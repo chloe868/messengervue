@@ -1,5 +1,5 @@
 <template>
-  <div class="conversations" v-if="parseInt(auth.messenger.group.account_id) === user.userID && jquery.inArray(parseInt(auth.messenger.group.request.type), common.fulfillmentTypesWithValidation)">
+  <div class="conversations" v-if="parseInt(auth.messenger.group.account_id) === user.userID && jquery.inArray(parseInt(auth.messenger.group.request.type), common.fulfillmentTypesWithValidation) > -1">
     <div class="message-row" v-if="auth.messenger.group.validations.complete_status === false">
       <div class="template">
         <div class="incre-row text-center">
@@ -17,6 +17,7 @@
 .btn{
   height: 45px !important;
 }
+
 .btn-white{
   background: $white;
   border: solid 1px $textBlue !important;
