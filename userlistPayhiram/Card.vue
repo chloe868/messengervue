@@ -3,7 +3,7 @@
     <img :src="config.BACKEND_URL + group.title.profile.url" class="profile" v-if="group.title.profile !== null">
     <i class="fa fa-user-circle-o" v-else></i>
     <label>
-      ****{{group.thread.substring(16, 32)}}
+      ****{{group.thread.substring(24, 32)}}
     </label>
     <strong class="badge badge-danger pull-right" v-if="parseInt(group.total_unread_messages) > 0">
       {{group.total_unread_messages}}

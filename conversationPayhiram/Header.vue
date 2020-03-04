@@ -2,7 +2,7 @@
   <div class="messenger-header-holder" v-if="auth.messenger.group !== null">
     <img :src="config.BACKEND_URL + auth.messenger.group.title.profile.url" class="profile" v-if="auth.messenger.group.title.profile !== null">
     <i class="fa fa-user-circle-o" v-else></i>
-    <label id="user-name">{{auth.messenger.group.title.username}} - <b class="text-primary action-link" @click="redirect('/requests/' + auth.messenger.group.thread)">****{{auth.messenger.group.thread.substring(16, 32)}}</b>
+    <label id="user-name">{{auth.messenger.group.title.username}} - <b class="text-primary action-link" @click="redirect('/requests/' + auth.messenger.group.thread)">****{{auth.messenger.group.thread.substring(24, 32)}}</b>
     </label> 
     <label class="pull-right text-primary" style="padding-right: 10px;">
       <b>{{auth.showRequestType(auth.messenger.group.request.type) + ' ' + auth.displayAmountWithCurrency((auth.messenger.group.request.amount + auth.messenger.group.peer.charge).toFixed(2), auth.messenger.group.request.currency)}}</b>
