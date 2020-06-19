@@ -2,6 +2,7 @@
   <div id="footer" class="holder">
     <div class="tools-container">
       <i class="fa fa-image" title="Add photo" aria-hidden="true" @click="showImages()"></i>
+      <i class="fa fa-image" title="Add photo" aria-hidden="true" @click="showImages()"></i>
       <input type="text" placeholder="Type your message here..." v-model="newMessageInput" @keypress="keypressHandler" class="message-input">
 <!--       <i class="fa fa-paper-plane" title="Send message" aria-hidden="true" @click="sendMessage()"></i> -->
       <button class="btn send-btn" @click="sendMessage()">Send</button>
