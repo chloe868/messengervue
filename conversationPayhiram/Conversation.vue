@@ -4,7 +4,10 @@
     <div class="conversation-messages-holder">
       <c-body :conversations="auth.messenger.messages" :group="auth.messenger.group" v-if="auth.messenger.group !== null"></c-body>
     </div>
-    <c-footer :group="auth.messenger.group" v-if="auth.messenger.group !== null && parseInt(auth.messenger.group.request.status) < 2" @changeGroupEvent="changedGroupHandler($event)"></c-footer>
+
+    <!-- && parseInt(auth.messenger.group.request.status) < 2 -->
+    
+    <c-footer :group="auth.messenger.group" v-if="auth.messenger.group !== null" @changeGroupEvent="changedGroupHandler($event)"></c-footer>
   </div>
 </template>
 <style scoped lang="scss">

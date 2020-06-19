@@ -4,9 +4,11 @@
     <i class="fa fa-user-circle-o" v-else></i>
     <label id="user-name">{{auth.messenger.group.title.username}} - <b class="text-primary action-link" @click="redirect('/requests/' + auth.messenger.group.thread)">****{{auth.messenger.group.thread.substring(24, 32)}}</b>
     </label> 
-    <label class="pull-right text-primary" style="padding-right: 10px;">
+
+    <!-- <label class="pull-right text-primary" style="padding-right: 10px;">
       <b>{{auth.showRequestType(auth.messenger.group.request.type) + ' ' + auth.displayAmountWithCurrency((auth.messenger.group.request.amount + auth.messenger.group.peer.charge).toFixed(2), auth.messenger.group.request.currency)}}</b>
-    </label>
+    </label> -->
+    
     <!-- <i id="icon-call" class="fa fa-phone bg-primary icons" @click="callHandler(group.title.id)"></i> -->
     <i class="fa fa-chevron-right" @click="setMobileView()"></i>
   </div>

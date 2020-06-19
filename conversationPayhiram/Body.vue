@@ -56,9 +56,9 @@
 
       </div>
     </div>
-    <add-requirements :group="auth.messenger.group"></add-requirements>
+    <!-- <add-requirements :group="auth.messenger.group"></add-requirements>
     <send-requirements :group="auth.messenger.group"></send-requirements>
-    <transfer :group="auth.messenger.group"></transfer>
+    <transfer :group="auth.messenger.group"></transfer> -->
     <add-reviews :group="auth.messenger.group"></add-reviews>
     <browse-images-modal></browse-images-modal>
     <show-image-modal ref="showImage"></show-image-modal>
