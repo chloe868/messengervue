@@ -1,35 +1,44 @@
 <template>
   <div id="footer" class="holder">
     <div class="tools-container">
-      <i class="fa fa-image" title="Add photo" aria-hidden="true" @click="showImages()"></i>
-      <i class="fa fa-image" title="Add photo" aria-hidden="true" @click="showImages()"></i>
-      <input type="text" placeholder="Type your message here..." v-model="newMessageInput" @keypress="keypressHandler" class="message-input">
-<!--       <i class="fa fa-paper-plane" title="Send message" aria-hidden="true" @click="sendMessage()"></i> -->
-      <button class="btn send-btn" @click="sendMessage()">Send</button>
+      <div class="action-container">
+        <i class="fa fa-image" title="Add photo" aria-hidden="true" @click="showImages()"></i>
+        <i class="fas fa-paperclip" title="Add photo" aria-hidden="true" @click="showImages()"></i>
+        <input type="text" placeholder="Type your message here..." v-model="newMessageInput" @keypress="keypressHandler" class="message-input">
+  <!--       <i class="fa fa-paper-plane" title="Send message" aria-hidden="true" @click="sendMessage()"></i> -->
+        <button class="btn send-btn" @click="sendMessage()">Send</button>
+      </div>
     </div>
-    <browse-images-modal :customId="'sendImageModal'"></browse-images-modal>
+    <!-- <browse-images-modal :customId="'sendImageModal'"></browse-images-modal> -->
     <!-- <img src="" alt=""> -->
   </div>
 </template>
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
-.tools-container {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  line-height: 45px;
-}
 
 .holder{
-  display: inline-flex;
   align-items: center;
   width: 100%;
   float: left;
-  height: 50px;
+  height: 10vh;
   border-top: 1px solid #eee;
   background-color: $white;
-  align-items: flex-end;
   position: relative;
+  display: table;
+  min-height: 50px;
+}
+
+.tools-container {
+  align-items: center;
+  width: 100%;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.action-container{
+  align-items: center;
+  width: 100%;
+  display: flex;
 }
 
 .tools-container i{
@@ -54,7 +63,6 @@
   color: #007bff;
   border: solid 1px #007bff;
   height: 40px;
-  margin-top: 2px;
   margin-right: 10px;
 }
 </style>
