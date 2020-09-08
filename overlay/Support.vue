@@ -111,6 +111,7 @@
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
+import COMMON from 'src/common.js'
 import axios from 'axios'
 export default {
   mounted(){
@@ -123,7 +124,8 @@ export default {
       flag: false,
       conversationStatus: 'initial',
       group: null,
-      auth: AUTH
+      auth: AUTH,
+      common: COMMON
     }
   },
   components: {

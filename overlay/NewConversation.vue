@@ -3,7 +3,7 @@
     <div class="messenger-header">
       <div class="messenger-logo">
         <label class="back-icon" @click="changeConversationStatus('start')"><i class="fa fa-chevron-left"></i></label>
-        <label><b>{{config.APP_NAME}}</b></label>
+        <label><b>{{common.APP_NAME}}</b></label>
       </div>
       <div class="messenger-info">
         <p>
@@ -129,6 +129,7 @@
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
+import COMMON from 'src/common.js'
 import axios from 'axios'
 export default {
   mounted(){
@@ -137,6 +138,7 @@ export default {
     return {
       user: AUTH.user,
       config: CONFIG,
+      common: COMMON,
       data: null,
       groupId: null,
       flag: true,
