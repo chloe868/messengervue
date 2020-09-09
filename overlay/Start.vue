@@ -2,15 +2,8 @@
   <div>
     <div class="messenger-header">
       <div class="messenger-logo">
-        <img src="../../../assets/img/logo.png">
+        <img :src="require('src/assets/img/logo.png')">
         <label><b>{{config.APP_NAME}}</b></label>
-      </div>
-      <div class="messenger-info">
-        <h3 v-if="user.username.length < 20">Hi {{user.username}}!</h3>
-        <h3 v-else>Hi {{user.username.substr(0, 17)}}...!</h3>
-        <p>
-          Hello! What question do you have about {{config.APP_NAME}}? We'd love to help you.
-        </p>
       </div>
     </div>
     <div class="conversation-start">
@@ -31,7 +24,7 @@
 .messenger-header{
   width: 100%;
   float: left;
-  height: 40vh;
+  height: 225px;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
   background-image: linear-gradient(to bottom right, #ffffff, $primary);
@@ -70,7 +63,7 @@
 }
 
 .conversation-start{
-  height: 25vh;
+  height: 125px;
   margin-right: 5%;
   margin-left: 5%;
   width: 90%;

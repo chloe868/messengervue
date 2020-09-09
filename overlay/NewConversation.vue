@@ -5,11 +5,6 @@
         <label class="back-icon" @click="changeConversationStatus('start')"><i class="fa fa-chevron-left"></i></label>
         <label><b>{{common.APP_NAME}}</b></label>
       </div>
-      <div class="messenger-info">
-        <p>
-          Hello! What question do you have about ID Factory? We'd love to help you.
-        </p>
-      </div>
     </div>
     <div class="conversation-content">
       <div class="message-holder">
@@ -26,7 +21,7 @@
 .messenger-header{
   width: 100%;
   float: left;
-  height: 30vh;
+  height: 60px;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
   background-image: linear-gradient(to bottom right, #ffffff, $primary);
@@ -35,7 +30,7 @@
   height: 50px;
   float: left;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 5px;
 }
 .messenger-logo .back-icon{
   width: 40px;
@@ -103,13 +98,13 @@
   cursor: pointer;
 }
 .conversation-content{
-  height: 35vh;
+  height: 275px;
   width: 100%;
   float: left;
   background: #fff;
 }
 .message-holder{
-  height: 25vh;
+  height: 225px;
   overflow-y: auto;
   width: 100%;
   float: left;
@@ -118,7 +113,7 @@
   flex-direction: column-reverse;
 }
 .input-holder{
-  height: 10vh;
+  height: 50px;
   width: 100%;
   float: left;
   background: #fff;
@@ -146,8 +141,8 @@ export default {
     }
   },
   components: {
-    'send': require('components/increment/support/Send.vue'),
-    'messages': require('components/increment/support/Messages.vue')
+    'send': require('components/increment/messengervue/overlay/Send.vue'),
+    'messages': require('components/increment/messengervue/overlay/Messages.vue')
   },
   watch: {
     groupId: function(newVal, oldVal) { // watch it

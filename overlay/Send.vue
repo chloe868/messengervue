@@ -1,17 +1,17 @@
 <template>
-  <div class="holder">
+  <div class="send-holder">
     <input type="text" class="custom-input" placeholder="Send a message" v-model="newMessageInput" @keyup.enter="newmessage()">
   </div>
 </template>
 <style scoped>
-.holder{
+.send-holder{
   width: 100%;
   float: left;
-  height: 60px;
+  height: 48px;
 }
 .custom-input{
   border: 0px;
-  height: 59px;
+  height: 46px;
   width: 100%;
   float: left;
   padding-left: 10px;

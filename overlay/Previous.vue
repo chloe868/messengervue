@@ -16,8 +16,7 @@
             <label class="pull-right">{{item.last_message.created_at_human}}</label>
           </span>
           <span class="middle" >
-            <label v-if="item.last_message.description.length < 43">{{item.last_message.description}}</label>
-            <label v-else>{{item.last_message.description.substr(0,39)}}...</label>
+            <label>{{item.last_message.description}}</label>
           </span>
         </div>
       </div>
@@ -29,19 +28,19 @@
 .messenger-header{
   width: 100%;
   float: left;
-  height: 70px;
+  height: 60px;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
   background-image: linear-gradient(to right, #fffff0, $primary);
 }
 .messenger-header{
-  line-height: 70px;
+  line-height: 60px;
 }
 .back-icon{
   width: 40px;
   height: 40px;
   float: left;
-  margin-top: 15px;
+  margin-top: 10px;
   text-align: center;
   margin-left: 2%;
   margin-right: 2%;
@@ -56,7 +55,7 @@
 .conversation-content{
   width: 100%;
   float: left;
-  height: 390px;
+  height: 290px;
   margin-bottom: 5px;
   margin-top: 5px;
   overflow-y: auto;
@@ -109,6 +108,7 @@
   line-height: 20px;
   font-style: italic;
   font-weight: 500;
+  text-overflow: ellipsis;
 }
 </style>
 <script>

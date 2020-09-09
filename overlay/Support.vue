@@ -1,22 +1,11 @@
 <template>
   <div class="support-messenger">
-    <div class="messenger-content" v-if="flag === true">
+    <div class="messenger-content">
       <start  v-if="conversationStatus === 'start'"></start>
       <new-conversation v-if="conversationStatus === 'new-conversation'"></new-conversation>
       <conversation v-if="conversationStatus === 'conversation' && group !== null" :item="group"></conversation>
       <previous v-if="conversationStatus === 'previous'"></previous>
     </div>
-    <div class="messenger-content-first" v-if="conversationStatus === 'initial' && flag === false && user.username !== null">
-      <label class="username" v-if="user.username.length < 20">Hi {{user.username}}!</label>
-      <label class="username" v-else>Hi {{user.username.substr(0, 17)}}...!</label>
-      <label class="question" v-if="user.type !== 'ADMIN' && user.type !== 'SUPPORT'">Is there anything we can help for you?</label>
-      <label class="question" v-else>Please answers the inquiries.</label>
-    </div>
-    <span class="messenger-icon"  @click="changeFlag()">
-      <i class="fas fa-comment" v-if="flag === false"></i>
-      <i class="fa fa-close" v-if="flag === true"></i>
-      <label class="badge badge-danger" style="margin-left: -15px;" v-if="flag === false && auth.support.badge > 0">{{auth.support.badge}}</label>
-    </span>
   </div>
 </template>
 <style scoped lang="scss">
@@ -26,7 +15,7 @@
   min-height: 50px;
   overflow: hidden;
   position: fixed;
-  bottom: 10px;
+  bottom: 0px;
   right: 10px;
   max-width: 325px;
   z-index: 1000;
@@ -51,12 +40,11 @@
   line-height: 60px;
 }
 .messenger-content{
-  height: 65vh;
+  height: 360px;
   width: 325px;
   border-radius: 10px;
   float: left;
   border: solid 1px #ddd;
-  margin-bottom: 20px;
   background: #fff;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -122,17 +110,17 @@ export default {
       config: CONFIG,
       data: null,
       flag: false,
-      conversationStatus: 'initial',
+      conversationStatus: 'new-conversation',
       group: null,
       auth: AUTH,
       common: COMMON
     }
   },
   components: {
-    'start': require('components/increment/support/Start.vue'),
-    'previous': require('components/increment/support/Previous.vue'),
-    'conversation': require('components/increment/support/Conversation.vue'),
-    'new-conversation': require('components/increment/support/NewConversation.vue')
+    'start': require('components/increment/messengervue/overlay/Start.vue'),
+    'previous': require('components/increment/messengervue/overlay/Previous.vue'),
+    'conversation': require('components/increment/messengervue/overlay/Conversation.vue'),
+    'new-conversation': require('components/increment/messengervue/overlay/NewConversation.vue')
   },
   methods: {
     redirect(parameter){

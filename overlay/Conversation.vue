@@ -29,7 +29,7 @@
 .messenger-header{
   width: 100%;
   float: left;
-  height: 10vh;
+  height: 50px;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
   background-image: linear-gradient(to right, #fffff0, $primary);
@@ -83,13 +83,13 @@
 }
 
 .conversation-content{
-  height: 55vh;
+  height: 250px;
   width: 100%;
   float: left;
   background: #fff;
 }
 .message-holder{
-  height: 44vh;
+  height: 250;
   overflow-y: auto;
   width: 100%;
   float: left;
@@ -98,7 +98,7 @@
   flex-direction: column-reverse;
 }
 .input-holder{
-  height: 10vh;
+  height: 50px;
   width: 100%;
   float: left;
   background: #fff;
@@ -124,8 +124,8 @@ export default {
   },
   props: ['item'],
   components: {
-    'send': require('components/increment/support/Send.vue'),
-    'messages': require('components/increment/support/Messages.vue')
+    'send': require('components/increment/messengervue/overlay/Send.vue'),
+    'messages': require('components/increment/messengervue/overlay/Messages.vue')
   },
   methods: {
     redirect(parameter){
