@@ -3,7 +3,7 @@
     <div class="messenger-header">
       <div class="messenger-logo">
         <img :src="require('src/assets/img/logo.png')">
-        <label><b>{{config.APP_NAME}}</b></label>
+        <label><b>{{common.APP_NAME}}</b></label>
       </div>
     </div>
     <div class="conversation-start">
@@ -113,6 +113,7 @@
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
+import COMMON from 'src/common.js'
 import axios from 'axios'
 export default {
   mounted(){
@@ -121,6 +122,7 @@ export default {
     return {
       user: AUTH.user,
       config: CONFIG,
+      common: COMMON,
       data: null
     }
   },

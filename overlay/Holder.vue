@@ -1,10 +1,7 @@
 <template>
   <div class="support-messenger">
     <div class="messenger-content">
-      <start  v-if="conversationStatus === 'start'"></start>
-      <new-conversation v-if="conversationStatus === 'new-conversation'"></new-conversation>
-      <conversation v-if="conversationStatus === 'conversation' && group !== null" :item="group"></conversation>
-      <previous v-if="conversationStatus === 'previous'"></previous>
+      <card></card>
     </div>
   </div>
 </template>
@@ -40,9 +37,10 @@
   line-height: 60px;
 }
 .messenger-content{
-  height: 360px;
+  height: 325px;
   width: 325px;
-  border-radius: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   float: left;
   border: solid 1px #ddd;
   background: #fff;
@@ -110,17 +108,13 @@ export default {
       config: CONFIG,
       data: null,
       flag: false,
-      conversationStatus: 'new-conversation',
       group: null,
       auth: AUTH,
       common: COMMON
     }
   },
   components: {
-    'start': require('components/increment/messengervue/overlay/Start.vue'),
-    'previous': require('components/increment/messengervue/overlay/Previous.vue'),
-    'conversation': require('components/increment/messengervue/overlay/Conversation.vue'),
-    'new-conversation': require('components/increment/messengervue/overlay/NewConversation.vue')
+    'card': require('components/increment/messengervue/overlay/Card.vue')
   },
   methods: {
     redirect(parameter){
