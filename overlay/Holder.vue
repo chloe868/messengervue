@@ -126,7 +126,7 @@ export default {
         this.conversationStatus = 'start'
       }
       if(this.flag === true){
-        AUTH.support.badge = 0
+        AUTH.messenger.badge = 0
       }
     }
   }

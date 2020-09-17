@@ -47,13 +47,12 @@ export default {
         let parameter = {
           messenger_group_id: this.groupId,
           message: this.newMessageInput,
-          account_id: this.user.userID,
-          type: 'support'
+          account_id: this.user.userID
         }
         this.APIRequest('messenger_messages/create', parameter).then(response => {
           if(response.data !== null){
             this.newMessageInput = null
-            AUTH.support.messages.push(response.data)
+            AUTH.messenger.messages.push(response.data)
           }
         })
       }else if((this.newMessageInput !== '' || this.newMessageInput !== null) && this.flag === true){

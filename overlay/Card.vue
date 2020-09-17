@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="messenger-header">
-      <label>{{common.APP_NAME}}<i class="fa fa-times pull-right"></i></label>
+      <label><b>****{{auth.messenger.title.substr(55, 43)}}</b><i class="fa fa-times pull-right" @click="close()"></i></label>
     </div>
     <div class="conversation-content">
       <div class="message-holder">
-        <messages :data="auth.support.messages"  v-if="auth.support.messages !== null"></messages>
+        <messages :data="auth.messenger.messages"  v-if="auth.messenger.messages !== null"></messages>
       </div>
       <div class="input-holder">
         <send :flag="flag" :groupId="groupId"></send>
@@ -100,7 +100,11 @@ export default {
       ROUTER.push(parameter)
     },
     close(){
-      //
+      AUTH.messenger.messages = []
+      AUTH.messenger.title = null
+      AUTH.messenger.messengerGroupId = null
+      AUTH.messenger.group = null
+      AUTH.messenger.badge = 0
     },
     retrieve(){
       if(this.groupId !== null){
@@ -113,9 +117,9 @@ export default {
         }
         this.APIRequest('messenger_messages/retrieve', parameter).done(response => {
           if(response.data.length > 0){
-            AUTH.support.messages = response.data
+            AUTH.messenger.messages = response.data
           }else{
-            AUTH.support.messages = null
+            AUTH.messenger.messages = null
           }
         })
       }

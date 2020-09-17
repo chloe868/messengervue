@@ -3,7 +3,7 @@
     <div class="messenger-header">
       <label class="back-icon" @click="changeConversationStatus('previous')">
         <i class="fa fa-chevron-left"></i>
-        <label class="badge badge-danger" style="margin-left: -1px;" v-if="auth.support.badge > 0">{{auth.support.badge}}</label>
+        <label class="badge badge-danger" style="margin-left: -1px;" v-if="auth.messenger.badge > 0">{{auth.messenger.badge}}</label>
       </label>
       <div class="profile" v-if="item.last_message.title !== null">
         <img :src="config.BACKEND_URL + item.last_message.title.profile.url" v-if="item.last_message.title.profile !== null">
@@ -16,7 +16,7 @@
     </div>
     <div class="conversation-content">
         <div class="message-holder">
-          <messages :data="auth.support.messages" v-if="auth.support.messages !== null"></messages>
+          <messages :data="auth.messenger.messages" v-if="auth.messenger.messages !== null"></messages>
         </div>
         <div class="input-holder">
           <send :flag="false" :groupId="item.id"></send>
@@ -133,7 +133,7 @@ export default {
     },
     changeConversationStatus(status){
       this.$parent.conversationStatus = status
-      AUTH.support.badge = 0
+      AUTH.messenger.badge = 0
     },
     retrieve(){
       if(this.item !== null){
@@ -146,9 +146,9 @@ export default {
         }
         this.APIRequest('messenger_messages/retrieve', parameter).done(response => {
           if(response.data.length > 0){
-            AUTH.support.messages = response.data
+            AUTH.messenger.messages = response.data
           }else{
-            AUTH.support.messages = null
+            AUTH.messenger.messages = null
           }
         })
       }
