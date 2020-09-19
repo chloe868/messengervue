@@ -43,28 +43,17 @@ export default {
       ROUTER.push(parameter)
     },
     newmessage(){
-      if((this.newMessageInput !== '' || this.newMessageInput !== null) && this.flag === false){
+      if((this.newMessageInput !== '' || this.newMessageInput !== null)){
         let parameter = {
-          messenger_group_id: this.groupId,
+          messenger_group_id: AUTH.messenger.messengerGroupId,
           message: this.newMessageInput,
-          account_id: this.user.userID
+          account_id: this.user.userID,
+          payload: 'text'
         }
         this.APIRequest('messenger_messages/create', parameter).then(response => {
           if(response.data !== null){
             this.newMessageInput = null
             AUTH.messenger.messages.push(response.data)
-          }
-        })
-      }else if((this.newMessageInput !== '' || this.newMessageInput !== null) && this.flag === true){
-        let parameter = {
-          creator: this.user.userID,
-          message: this.newMessageInput
-        }
-        this.APIRequest('messenger_groups/create_new_issue', parameter).then(response => {
-          if(response.data > 0){
-            this.$parent.groupId = response.data
-            this.$parent.flag = false
-            this.newMessageInput = null
           }
         })
       }

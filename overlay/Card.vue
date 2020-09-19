@@ -73,6 +73,7 @@ import COMMON from 'src/common.js'
 import axios from 'axios'
 export default {
   mounted(){
+    this.retrieve()
   },
   data(){
     return {
@@ -105,24 +106,62 @@ export default {
       AUTH.messenger.messengerGroupId = null
       AUTH.messenger.group = null
       AUTH.messenger.badge = 0
+      AUTH.messenger.data = null
     },
     retrieve(){
-      if(this.groupId !== null){
+      if(AUTH.messenger.group === null){
         let parameter = {
           condition: [{
-            column: 'messenger_group_id',
-            value: this.groupId,
+            column: 'title',
+            value: AUTH.messenger.data.code,
             clause: '='
           }]
         }
-        this.APIRequest('messenger_messages/retrieve', parameter).done(response => {
+        this.APIRequest('messenger_groups/retrieve', parameter).done(response => {
           if(response.data.length > 0){
-            AUTH.messenger.messages = response.data
+            // retrieve messages using id
+            AUTH.messenger.messengerGroupId = response.data[0].id
+            AUTH.messenger.group = response.data[0]
+            this.retrieveMessages(response.data[0].id)
           }else{
-            AUTH.messenger.messages = null
+            // create new message
+            this.createNewMessage()
           }
         })
       }
+    },
+    createNewMessage(){
+      let parameter = {
+        member: AUTH.messenger.data.account_id,
+        creator: this.user.userID,
+        title: AUTH.messenger.data.code,
+        payload: AUTH.messenger.data.id
+      }
+      this.APIRequest('custom_messenger_groups/create', parameter).done(response => {
+        if(response.data > 0){
+          AUTH.messenger.messengerGroupId = response.data
+          this.retrieveMessages(response.data)
+        }else{
+          // Unable to create
+        }
+      })
+    },
+    retrieveMessages(id){
+      let parameter = {
+        condition: [{
+          column: 'messenger_group_id',
+          value: id,
+          clause: '='
+        }]
+      }
+      this.APIRequest('messenger_messages/retrieve', parameter).done(response => {
+        if(response.data.length > 0){
+          AUTH.messenger.messages = response.data
+        }else{
+          // create new message
+          AUTH.messenger.messages = null
+        }
+      })
     }
   }
 }

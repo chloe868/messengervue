@@ -1,7 +1,7 @@
 <template>
   <div id="messenger">
-    <div class="support-messenger-holder" v-if="data !== null">
-      <div class="message-row" v-for="item, index in data">
+    <div class="support-messenger-holder" v-if="auth.messenger.messages !== null">
+      <div class="message-row" v-for="item, index in auth.messenger.messages">
         <div class="template" v-if="parseInt(item.account_id) !== user.userID">
           <div class="header">
             <div class="profile">
@@ -152,7 +152,8 @@ export default {
   data(){
     return {
       user: AUTH.user,
-      config: CONFIG
+      config: CONFIG,
+      auth: AUTH
     }
   },
   props: ['data'],
