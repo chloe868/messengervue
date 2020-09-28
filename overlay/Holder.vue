@@ -88,8 +88,9 @@
   .messenger-icon i{
     line-height: 50px;
   }
+  // creates extra space below msg input
   .messenger-content{
-    height: 70vh;
+    // height: 70vh;
   }
 }
 </style>
