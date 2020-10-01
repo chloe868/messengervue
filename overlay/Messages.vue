@@ -35,6 +35,9 @@
               <label v-html="item.message"></label>
             </bdi>
           </label>
+          <bdi v-if="item.sending_flag === true" class="newLineBdi">
+            <label style="font-size: 8px; color: #555;">Sending...</label>
+          </bdi>
         </div>
       </div>
     </div>
@@ -137,6 +140,14 @@
 }
 .template .content label, .template .content-righ label{
   line-height: 18px;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+.newLineBdi{
+  width: 100%;
+  float: left;
+  line-height: 12px;
 }
 
 

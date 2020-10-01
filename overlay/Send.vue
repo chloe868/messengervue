@@ -42,20 +42,51 @@ export default {
     redirect(parameter){
       ROUTER.push(parameter)
     },
+    setToSent(indexParam, object){
+      let item = AUTH.messenger.messages.map((item, index) => {
+        if(index === indexParam){
+          return {
+            ...item,
+            sending_flag: false,
+            ...object
+          }
+        }
+        return item
+      })
+      AUTH.messenger.messages = item
+    },
     newmessage(){
+      console.log('hhi')
       if((this.newMessageInput !== '' || this.newMessageInput !== null)){
+        let input = this.newMessageInput
+        AUTH.messenger.messages.push({
+          messenger_group_id: AUTH.messenger.messengerGroupId,
+          message: input,
+          account_id: this.user.userID,
+          payload: 'text',
+          sending_flag: true,
+          account: this.user
+        })
         let parameter = {
           messenger_group_id: AUTH.messenger.messengerGroupId,
-          message: this.newMessageInput,
+          message: input,
           account_id: this.user.userID,
           payload: 'text'
         }
-        this.APIRequest('messenger_messages/create', parameter).then(response => {
+        this.newMessageInput = null
+        this.APIRequest('messenger_messages/create_less_return', parameter).then(response => {
           if(response.data !== null){
             this.newMessageInput = null
-            AUTH.messenger.messages.push(response.data)
+            for (var i = AUTH.messenger.messages.length - 1; i >= 0; i--) {
+              let item = AUTH.messenger.messages[i]
+              this.setToSent(i, response.data)
+            }
+          }else{
+            // error message here
           }
         })
+      }else{
+        this.newMessageInput = null
       }
     }
   }
