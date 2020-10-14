@@ -169,7 +169,7 @@ export default {
           }else{
             $('#message-holder-scroll').animate({
               scrollTop: scrollTop - 50
-            }, 400)
+            }, 50)
             if(AUTH.messenger.messages.length > 0){
               let nessages = [...response.data.reverse(), ...AUTH.messenger.messages]
               AUTH.messenger.messages = nessages
@@ -189,7 +189,6 @@ export default {
     onScroll(){
       var height = $('#message-holder-scroll').height()
       var scrollTop = $('#message-holder-scroll').scrollTop()
-      console.log(scrollTop + '/' + height)
       if(scrollTop < height && scrollTop <= (((AUTH.messenger.messages.length / 5) * 305)) * -1 && this.isLoading === false){
         this.retrieveMessages(AUTH.messenger.messengerGroupId, true, scrollTop)
       }
