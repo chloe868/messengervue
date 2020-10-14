@@ -5,46 +5,58 @@
         <div class="template" v-if="parseInt(item.account_id) !== user.userID">
           <div class="header">
             <div class="profile">
-              <img :src="config.BACKEND_URL + item.account.profile.url" v-if="item.account.profile !== null">
-              <i class="fa fa-user-circle-o text-green" v-else></i>
+              <img :src="config.BACKEND_URL + item.account.profile.url" v-if="item.account && item.account.profile !== null">
+              <i class="fa fa-user-circle text-green" v-else></i>
             </div>
             <span class="details" v-if="item.account !== null">
               <label><b>{{item.account.username}}</b></label>
             </span>
           </div>
-        <div class="content">
-          <label>
-            <label v-html="item.message"></label>
-          </label>
-        </div>
-      </div>
 
-      <div class="template" v-else>
-        <div class="header-right">
-          <div class="profile">
-            <img :src="config.BACKEND_URL + item.account.profile.url" v-if="item.account.profile !== null">
-            <i class="fa fa-user-circle-o text-green" v-else></i>
+          <div class="content" style="line-height: 12px;">
+            <label style="font-size: 11px; color: #555; margin-bottom: 0px;">
+              {{item.created_at_human}}
+            </label>
           </div>
-          <span class="details" v-if="item.account !== null">
-            <label><b>{{item.account.username}}</b></label>
-          </span>
+          <div class="content">
+            <label>
+              <label v-html="item.message" class="text-holder-left"></label>
+            </label>
+          </div>
         </div>
-        <div class="content-right">
-          <label>
-            <bdi>
-              <label v-html="item.message"></label>
+
+        <div class="template" v-else>
+          <div class="header-right">
+            <div class="profile">
+              <img :src="config.BACKEND_URL + item.account.profile.url" v-if="item.account && item.account.profile !== null">
+              <i class="fa fa-user-circle text-green" v-else></i>
+            </div>
+            <span class="details" v-if="item.account !== null">
+              <label><b>{{item.account.username}}</b></label>
+            </span>
+          </div>
+          <div class="content-right" style="line-height: 12px;">
+            <label style="font-size: 11px; color: #555; margin-bottom: 0px;">
+              {{item.created_at_human}}
+            </label>
+          </div>
+          <div class="content-right">
+            <label>
+              <bdi>
+                <label v-html="item.message" class="text-holder-right"></label>
+              </bdi>
+            </label>
+            <bdi v-if="item.sending_flag === true" class="newLineBdi">
+              <label style="font-size: 8px; color: #555;">Sending...</label>
             </bdi>
-          </label>
-          <bdi v-if="item.sending_flag === true" class="newLineBdi">
-            <label style="font-size: 8px; color: #555;">Sending...</label>
-          </bdi>
+          </div>
         </div>
-      </div>
     </div>
   </div>
   </div>
 </template>
-<style scoped>
+<style scoped lang="scss">
+@import "~assets/style/colors.scss";
 .support-messenger-holder{
   width: 90%;
   float: left;
@@ -138,10 +150,9 @@
   overflow-y: hidden;
   text-align: right;
 }
-.template .content label, .template .content-righ label{
+.template .content label, .template .content-right label{
   line-height: 18px;
   margin-bottom: 0px;
-  padding-bottom: 0px;
 }
 
 .newLineBdi{
@@ -150,6 +161,32 @@
   line-height: 12px;
 }
 
+
+.text-holder-right{
+  background-color: $primary;
+  color: $white;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 1px;
+}
+
+.text-holder-left{
+  background-color: $primary;
+  color: $white;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  border-bottom-left-radius: 1px;
+  border-bottom-right-radius: 7px;
+}
 
 </style>
 <script>

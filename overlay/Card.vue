@@ -4,7 +4,7 @@
       <label><b>****{{auth.messenger.title.substr(55, 43)}}</b><i class="fa fa-times pull-right" @click="close()"></i></label>
     </div>
     <div class="conversation-content">
-      <div class="message-holder">
+      <div class="message-holder" id="message-holder-scroll">
         <messages :data="auth.messenger.messages"  v-if="auth.messenger.messages !== null"></messages>
       </div>
       <div class="input-holder">
@@ -74,6 +74,7 @@ import axios from 'axios'
 export default {
   mounted(){
     this.retrieve()
+    $('#message-holder-scroll').scroll(this.onScroll)
   },
   data(){
     return {
@@ -83,7 +84,8 @@ export default {
       data: null,
       groupId: null,
       flag: true,
-      auth: AUTH
+      auth: AUTH,
+      isLoading: false
     }
   },
   components: {
@@ -140,28 +142,57 @@ export default {
       this.APIRequest('custom_messenger_groups/create', parameter).done(response => {
         if(response.data > 0){
           AUTH.messenger.messengerGroupId = response.data
-          this.retrieveMessages(response.data)
+          this.retrieveMessages(response.data, false, 0)
         }else{
           // Unable to create
         }
       })
     },
-    retrieveMessages(id){
+    retrieveMessages(id, flag, scrollTop){
       let parameter = {
         condition: [{
           column: 'messenger_group_id',
           value: id,
           clause: '='
-        }]
+        }],
+        sort: {
+          created_at: 'desc'
+        },
+        limit: 5,
+        offset: AUTH.messenger.messages.length > 0 ? AUTH.messenger.messages.length - 1 : 0
       }
+      this.isLoading = true
       this.APIRequest('messenger_messages/retrieve', parameter).done(response => {
         if(response.data.length > 0){
-          AUTH.messenger.messages = response.data
+          if(flag === false){
+            AUTH.messenger.messages = response.data.reverse()
+          }else{
+            $('#message-holder-scroll').animate({
+              scrollTop: scrollTop - 50
+            }, 400)
+            if(AUTH.messenger.messages.length > 0){
+              let nessages = [...response.data.reverse(), ...AUTH.messenger.messages]
+              AUTH.messenger.messages = nessages
+            }else{
+              AUTH.messenger.messages = response.data.reverse()
+            }
+          }
         }else{
           // create new message
-          AUTH.messenger.messages = null
+          if(flag === false){
+            AUTH.messenger.messages = null
+          }
         }
+        this.isLoading = false
       })
+    },
+    onScroll(){
+      var height = $('#message-holder-scroll').height()
+      var scrollTop = $('#message-holder-scroll').scrollTop()
+      console.log(scrollTop + '/' + height)
+      if(scrollTop < height && scrollTop <= (((AUTH.messenger.messages.length / 5) * 305)) * -1 && this.isLoading === false){
+        this.retrieveMessages(AUTH.messenger.messengerGroupId, true, scrollTop)
+      }
     }
   }
 }
