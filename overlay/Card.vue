@@ -114,8 +114,7 @@ export default {
   },
   components: {
     'send': require('components/increment/messengervue/overlay/Send.vue'),
-    'messages': require('components/increment/messengervue/overlay/Messages.vue'),
-    'loader': require('components/loader/Loading.vue')
+    'messages': require('components/increment/messengervue/overlay/Messages.vue')
   },
   watch: {
     groupId: function(newVal, oldVal) { // watch it
