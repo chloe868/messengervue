@@ -216,7 +216,6 @@ export default {
     onScroll(){
       var height = $('#message-holder-scroll').height()
       var scrollTop = $('#message-holder-scroll').scrollTop()
-      var a = AUTH.messenger.messages.length
       if(scrollTop < height && scrollTop <= (((AUTH.messenger.messages.length / 5) * 301)) * -1 && this.isLoading === false){
         this.retrieveMessages(AUTH.messenger.messengerGroupId, true, scrollTop)
       }
