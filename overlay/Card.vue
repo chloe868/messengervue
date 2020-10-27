@@ -31,7 +31,7 @@
 }
 
 .fa-spin{
-  animation-duration: 0.80s;
+  animation-duration: 0.50s;
 }
 
 .messenger-header{
@@ -95,7 +95,9 @@ export default {
     this.retrieve()
     let obj = this
     $('#message-holder-scroll').scroll(function(){
-      if($('#message-holder-scroll').scrollTop() < $('#message-holder-scroll').height()){
+      if(this.height < $('#message-holder-scroll').scrollTop()){
+      }else if($('#message-holder-scroll').scrollTop() < $('#message-holder-scroll').height()){
+        this.height = $('#message-holder-scroll').scrollTop()
         obj.onScroll()
       }
     })
@@ -109,6 +111,7 @@ export default {
       groupId: null,
       flag: true,
       auth: AUTH,
+      height: 0,
       isLoading: false
     }
   },
