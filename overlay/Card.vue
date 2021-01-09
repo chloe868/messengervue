@@ -96,7 +96,6 @@ export default {
     let obj = this
     $('#message-holder-scroll').scroll(function(){
       if(this.height < $('#message-holder-scroll').scrollTop()){
-        console.log('mao ni')
       }else if($('#message-holder-scroll').scrollTop() < $('#message-holder-scroll').height()){
         this.height = $('#message-holder-scroll').scrollTop()
         obj.onScroll()
@@ -217,8 +216,11 @@ export default {
     onScroll(){
       var height = $('#message-holder-scroll').height()
       var scrollTop = $('#message-holder-scroll').scrollTop()
+<<<<<<< HEAD
       var a = AUTH.messenger.messages.length
       console.log($('#message-holder-scroll').height())
+=======
+>>>>>>> 1f0380c9cf8bd71b61a04aa5dec190450d6c93ee
       if(scrollTop < height && scrollTop <= (((AUTH.messenger.messages.length / 5) * 301)) * -1 && this.isLoading === false){
         this.retrieveMessages(AUTH.messenger.messengerGroupId, true, scrollTop)
       }
