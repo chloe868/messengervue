@@ -5,6 +5,10 @@
     </div>
     <div class="conversation-content">
       <div class="message-holder" id="message-holder-scroll">
+        <div class="loading" v-if="isLoading">
+          <span class="fa fa-spinner fa-spin"></span>
+        </div>
+       
         <messages :data="auth.messenger.messages"  v-if="auth.messenger.messages !== null"></messages>
       </div>
       <div class="input-holder">
@@ -15,6 +19,21 @@
 </template>
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
+.loading{
+  text-align: center;
+  position: absolute;
+  z-index: 9;
+  color: $primary;
+  padding: 8px 18px;
+  border-radius: 5px;
+  left: calc(55% - 45px);
+  top: calc(15% - 18px);
+}
+
+.fa-spin{
+  animation-duration: 0.50s;
+}
+
 .messenger-header{
   width: 100%;
   float: left;
@@ -74,7 +93,15 @@ import axios from 'axios'
 export default {
   mounted(){
     this.retrieve()
-    $('#message-holder-scroll').scroll(this.onScroll)
+    let obj = this
+    $('#message-holder-scroll').scroll(function(){
+      if(this.height < $('#message-holder-scroll').scrollTop()){
+        console.log('mao ni')
+      }else if($('#message-holder-scroll').scrollTop() < $('#message-holder-scroll').height()){
+        this.height = $('#message-holder-scroll').scrollTop()
+        obj.onScroll()
+      }
+    })
   },
   data(){
     return {
@@ -85,6 +112,7 @@ export default {
       groupId: null,
       flag: true,
       auth: AUTH,
+      height: 0,
       isLoading: false
     }
   },
@@ -189,7 +217,9 @@ export default {
     onScroll(){
       var height = $('#message-holder-scroll').height()
       var scrollTop = $('#message-holder-scroll').scrollTop()
-      if(scrollTop < height && scrollTop <= (((AUTH.messenger.messages.length / 5) * 305)) * -1 && this.isLoading === false){
+      var a = AUTH.messenger.messages.length
+      console.log($('#message-holder-scroll').height())
+      if(scrollTop < height && scrollTop <= (((AUTH.messenger.messages.length / 5) * 301)) * -1 && this.isLoading === false){
         this.retrieveMessages(AUTH.messenger.messengerGroupId, true, scrollTop)
       }
     }
